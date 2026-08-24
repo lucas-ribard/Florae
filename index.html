@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="module" src="./js/main.js" defer></script>
+    <link rel="stylesheet" href="./style.css">
+
+    <title>Florae</title>
+</head>
+
+<body> 
+  
+
+    <div class="game">
+
+        <h1>🌱 My Plant</h1>
+
+        <!-- Plant -->
+        <div class="plant-area">
+            <div id="plant">🌱</div>
+        </div>
+
+        <!-- Stage -->
+        <p>
+            Stage:
+            <span id="stageValue">seed</span> - <span id="levelValue">1</span>
+        </p>
+        <p>
+            Growth Points:
+            <span id="growthPoints">0</span>        
+        </p>
+
+        <p>
+            Season:
+            <span id="seasonValue">Spring</span>
+            -
+             Day:
+            <span id="dayValue">1</span>
+        </p>
+
+        <p>
+            Weather:
+            <span id="weatherValue">Sunny</span>
+            -
+            Days remaining:
+            <span id="weatherDurationValue">0</span>
+        </p>
+
+        <p>
+            Bugs passed today:
+            <span id="bugsTypeValue">None</span>
+            x
+            <span id="bugsValue">0</span>
+        </p>
+
+        <!-- Stats -->
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span>❤️ Health</span>
+                    <span id="healthValue">100</span>
+                </div>
+
+                <div class="bar">
+                    <div id="healthBar" class="bar-fill"></div>
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span>💧 Water</span>
+                    <span id="waterValue">50</span>
+                </div>
+
+                <div class="bar">
+                    <div id="waterBar" class="bar-fill"></div>
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span>☀️ Sunlight</span>
+                    <span id="sunValue">50</span>
+                </div>
+
+                <div class="bar">
+                    <div id="sunBar" class="bar-fill"></div>
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span>🌱 Nutriments</span>
+                    <span id="nutrimentsValue">50</span>
+                </div>
+
+                <div class="bar">
+                    <div id="nutrimentsBar" class="bar-fill"></div>
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span>🌿 Growth</span>
+                    <span id="growthValue">0</span>
+                </div>
+
+                <div class="bar">
+                    <div id="growthBar" class="bar-fill"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <h3>Debug Actions</h3>
+        <!-- Actions -->
+        <div class="actions">
+
+            
+
+            <button id="waterButton">
+                Water
+            </button>
+
+            <button id="sunButton">
+                Sun
+            </button>
+
+            <button id="nutrimentsButton">
+                Nutriments
+            </button>
+
+            <button id="resetButton" type="button" style="background-color: rgb(104, 0, 0); color: white;">
+                Reset
+            </button>
+        </div>
+
+        <div id="message">
+            Take care of your plant!
+        </div>
+
+    </div>
+
+</body>
+
+</html>

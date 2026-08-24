@@ -1,0 +1,164 @@
+* {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background: #102318;
+            color: white;
+        }
+
+        .game {
+            width: 400px;
+            padding: 30px;
+
+            background: #1b3524;
+            border: 2px solid #315c3c;
+            border-radius: 20px;
+
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        /* Plant */
+
+        .plant-area {
+            height: 220px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #142a1b;
+            border-radius: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .game {
+            font-weight: bold;
+        }
+        #plant {
+            font-size: 100px;
+
+            transition: transform 0.3s ease;
+        }
+
+        #plant:hover {
+            transform: scale(1.1);
+        }
+
+        /* Stats */
+
+        .stats {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            margin-bottom: 15px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 5px;
+        }
+
+        .bar {
+            width: 100%;
+            height: 12px;
+
+            background: #0d1810;
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 50%;
+
+            border-radius: 10px;
+
+            transition: width 0.3s ease;
+        }
+
+        #healthBar {
+            background: #e85d75;
+        }
+
+        #waterBar {
+            background: #4da6ff;
+        }
+
+        #sunBar {
+            background: #ffd166;
+        }
+
+        #nutrimentsBar {
+            background: #81432a;
+        }
+
+        #growthBar {
+            background: #65d66b;
+        }
+
+        /* Buttons */
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+
+            padding: 12px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #3c794d;
+            color: white;
+
+            font-size: 15px;
+            cursor: pointer;
+
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #519963;
+        }
+
+        /* Stage */
+
+        #levelValue {
+            color: #8ee695;
+            font-weight: bold;
+        }
+
+        #stageValue {
+            color: #44aa4c;
+            font-weight: bold;
+        }
+
+        #message {
+            min-height: 20px;
+            margin-top: 15px;
+
+            color: #b9e6be;
+        }
