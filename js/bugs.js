@@ -5,7 +5,7 @@ const bugTypes = {
     Ladybug: { weight: 1, nutriments: 2 }
 };
 
-export function rollBugs(bugs, plant) {
+export function rollBugs(bugs, plant, upgrades) {
     const bugChance = Math.floor(Math.random() * 100) + 1;
     bugs.type = "None";
     bugs.passedToday = 0;
@@ -20,7 +20,7 @@ export function rollBugs(bugs, plant) {
 
             if (typeRoll <= 0) {
                 bugs.type = type;
-                plant.nutriments += bugs.passedToday * bug.nutriments;
+                plant.nutriments += bugs.passedToday * (bug.nutriments + upgrades.roots);
                 break;
             }
         }

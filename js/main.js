@@ -1,6 +1,6 @@
 // main.js
 
-import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState } from "./gameData.js";
+import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade } from "./gameData.js";
 import { startGameClock } from "./gameClock.js";
 
 
@@ -18,6 +18,7 @@ const skillTreeButton = document.getElementById("skillTreeButton");
 const panelBackdrop = document.getElementById("panelBackdrop");
 const sidePanels = document.querySelectorAll(".side-panel");
 const closePanelButtons = document.querySelectorAll("[data-close-panel]");
+const upgradeBuyButtons = document.querySelectorAll("[data-upgrade]");
 
 const growthPointsValue = document.getElementById("growthPoints");
 
@@ -130,6 +131,13 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+upgradeBuyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        purchaseUpgrade(button.dataset.upgrade);
+        updateUI();
+    });
+});
+
 
 export function updateUI() {
 
@@ -145,6 +153,19 @@ export function updateUI() {
     healthValue.textContent = plant.health;
     healthFactorValue.textContent = plant.healthFactor;
     growthPointsValue.textContent = plant.growthPoints;
+
+    upgradeBuyButtons.forEach((button) => {
+        const upgrade = button.dataset.upgrade;
+        button.disabled = plant.growthPoints < getUpgradeCost(upgrade);
+    });
+
+    document.querySelectorAll("[data-upgrade-level]").forEach((levelValue) => {
+        levelValue.textContent = game.upgrades[levelValue.dataset.upgradeLevel];
+    });
+
+    document.querySelectorAll("[data-upgrade-cost]").forEach((costValue) => {
+        costValue.textContent = getUpgradeCost(costValue.dataset.upgradeCost);
+    });
 
     weatherValue.textContent = weather.type;
     weatherDurationValue.textContent = weather.daysRemaining;

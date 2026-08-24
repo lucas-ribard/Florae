@@ -47,6 +47,10 @@
             left: 14px;
         }
 
+        .side-tab-skill {
+            margin-top: 86px;
+        }
+
         .side-tab-right {
             right: 14px;
         }
@@ -213,6 +217,11 @@
                 left: 14px;
             }
 
+            .side-tab-skill {
+                margin-left: 112px;
+                margin-top: 0;
+            }
+
             .side-tab-right {
                 right: 14px;
             }
@@ -363,4 +372,49 @@
             margin-top: 15px;
 
             color: #b9e6be;
+        }
+
+        .upgrade-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .upgrade-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px;
+            background: #142a1b;
+            border: 1px solid #315c3c;
+            border-radius: 10px;
+        }
+
+        .upgrade-card h3 {
+            font-size: 15px;
+        }
+
+        .upgrade-card p {
+            margin: 5px 0 0;
+            font-size: 12px;
+        }
+
+        .upgrade-level {
+            color: #ffd166;
+            font-size: 11px;
+            font-weight: normal;
+        }
+
+        .upgrade-buy {
+            flex: 0 0 auto;
+            width: 72px;
+            padding: 9px 6px;
+            font-size: 12px;
+        }
+
+        .upgrade-buy:disabled {
+            background: #29412e;
+            color: #718b75;
+            cursor: not-allowed;
         }

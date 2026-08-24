@@ -11,6 +11,11 @@ export { plant, weather, bugs, game };
 const state = { plant, weather, bugs, game };
 
 loadGameState(state);
+game.upgrades = {
+    roots: game.upgrades?.roots ?? 0,
+    leaf: game.upgrades?.leaf ?? 0,
+    vitality: game.upgrades?.vitality ?? 0
+};
 
 export function saveGameState() {
     saveState(state);
@@ -26,7 +31,7 @@ export function rollWeather() {
 }
 
 export function rollBugs() {
-    rollBugsState(bugs, plant);
+    rollBugsState(bugs, plant, game.upgrades);
 }
 
 export function advanceGameDay() {
@@ -39,26 +44,43 @@ export function advanceGameDay() {
 
     weather.daysRemaining -= 1;
     rollBugs();
-    updatePlantState(plant, weather);
+    updatePlantState(plant, weather, game.upgrades);
     saveGameState();
 }
 
 export function waterPlant(amount) {
-    addResource(plant, "water", amount);
+    addResource(plant, "water", amount, game.upgrades);
     saveGameState();
 }
 
 export function giveSunlight(amount) {
-    addResource(plant, "sunlight", amount);
+    addResource(plant, "sunlight", amount, game.upgrades);
     saveGameState();
 }
 
 export function giveNutriments(amount) {
-    addResource(plant, "nutriments", amount);
+    addResource(plant, "nutriments", amount, game.upgrades);
     saveGameState();
 }
 
 export function updatePlant() {
-    updatePlantState(plant, weather);
+    updatePlantState(plant, weather, game.upgrades);
+}
+
+export function getUpgradeCost(upgrade) {
+    return 1 + game.upgrades[upgrade] * 2;
+}
+
+export function purchaseUpgrade(upgrade) {
+    const cost = getUpgradeCost(upgrade);
+
+    if (!(upgrade in game.upgrades) || plant.growthPoints < cost) {
+        return false;
+    }
+
+    plant.growthPoints -= cost;
+    game.upgrades[upgrade] += 1;
+    saveGameState();
+    return true;
 }
 

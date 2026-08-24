@@ -2,7 +2,7 @@ function clamp(value) {
     return Math.min(100, Math.max(0, value));
 }
 
-export function updatePlant(plant, weather) {
+export function updatePlant(plant, weather, upgrades) {
     plant.nutriments -= 1;
 
     switch (weather.type) {
@@ -37,7 +37,7 @@ export function updatePlant(plant, weather) {
 
     const resourcesHealthy = plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30;
     const healingAmount = resourcesHealthy
-        ? 5 + Math.max(0, plant.healthFactor)
+        ? 5 + Math.max(0, plant.healthFactor) + upgrades.vitality
         : plant.healthFactor;
 
     plant.health += healingAmount;
@@ -56,6 +56,14 @@ export function updatePlant(plant, weather) {
     }
 }
 
-export function addResource(plant, resource, amount) {
+export function addResource(plant, resource, amount, upgrades) {
+    if (amount > 0 && (resource === "water" || resource === "nutriments")) {
+        amount += upgrades.roots;
+    }
+
+    if (amount > 0 && resource === "sunlight") {
+        amount += upgrades.leaf;
+    }
+
     plant[resource] = clamp(plant[resource] + amount);
 }

@@ -42,5 +42,9 @@ export function resetGameState(state) {
 
     Object.assign(state.weather, { type: "Sunny", daysRemaining: 0, duration: 0 });
     Object.assign(state.bugs, { type: "None", passedToday: 0 });
-    Object.assign(state.game, { day: 1, season: "Spring" });
+    Object.assign(state.game, {
+        day: 1,
+        season: "Spring",
+        upgrades: { roots: 0, leaf: 0, vitality: 0 }
+    });
 }

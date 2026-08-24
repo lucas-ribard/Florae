@@ -23,5 +23,10 @@ export const bugs = {
 
 export const game = {
     day: 1,
-    season: "Spring"
+    season: "Spring",
+    upgrades: {
+        roots: 0,
+        leaf: 0,
+        vitality: 0
+    }
 };

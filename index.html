@@ -119,8 +119,9 @@
             </div>
 
         </div>
-
-        <h3>Debug Actions</h3>
+        
+        <br><br>
+        <h3>Debug</h3>
         <p>
             Health Factor:
             <span id="HealthFactorValue">0</span>
@@ -167,13 +168,12 @@
 
     </div>
 
-</body>
     <button id="upgradeButton" class="side-tab side-tab-left" type="button" aria-controls="upgradePanel" aria-expanded="false">
-        <span aria-hidden="true">⚙</span>
+        <span aria-hidden="true">✦</span>
         <span>Upgrades</span>
     </button>
 
-    <button id="skillTreeButton" class="side-tab side-tab-right" type="button" aria-controls="skillTreePanel" aria-expanded="false">
+    <button id="skillTreeButton" class="side-tab side-tab-left side-tab-skill" type="button" aria-controls="skillTreePanel" aria-expanded="false">
         <span aria-hidden="true">✦</span>
         <span>Skill tree</span>
     </button>
@@ -186,26 +186,34 @@
                 <p class="panel-kicker">Plant development</p>
                 <h2>Upgrades</h2>
             </div>
-            <button class="panel-close" type="button" data-close-panel aria-label="Close upgrades">×</button>
+            <button class="panel-close" type="button" data-close-panel aria-label="Close upgrades">x</button>
         </div>
         <div class="panel-content">
-            <div class="panel-empty-icon" aria-hidden="true">⚙</div>
-            <h3>Stronger roots, brighter leaves</h3>
-            <p>Upgrade choices will appear here as your plant grows.</p>
-            <div class="placeholder-list">
-                <div class="placeholder-row"><span>Root system</span><span>Coming soon</span></div>
-                <div class="placeholder-row"><span>Leaf vitality</span><span>Coming soon</span></div>
+            <p>Spend growth points to strengthen your plant.</p>
+            <div class="upgrade-list">
+                <div class="upgrade-card">
+                    <div><h3>Roots <span class="upgrade-level">Lv. <span data-upgrade-level="roots">0</span></span></h3><p>+1 water and nutriment gain per level</p></div>
+                    <button class="upgrade-buy" data-upgrade="roots" type="button">Buy <span data-upgrade-cost="roots">1</span></button>
+                </div>
+                <div class="upgrade-card">
+                    <div><h3>Leaf <span class="upgrade-level">Lv. <span data-upgrade-level="leaf">0</span></span></h3><p>+1 sunlight gain per level</p></div>
+                    <button class="upgrade-buy" data-upgrade="leaf" type="button">Buy <span data-upgrade-cost="leaf">1</span></button>
+                </div>
+                <div class="upgrade-card">
+                    <div><h3>Vitality <span class="upgrade-level">Lv. <span data-upgrade-level="vitality">0</span></span></h3><p>+1 healing per level</p></div>
+                    <button class="upgrade-buy" data-upgrade="vitality" type="button">Buy <span data-upgrade-cost="vitality">1</span></button>
+                </div>
             </div>
         </div>
     </aside>
 
-    <aside id="skillTreePanel" class="side-panel side-panel-right" aria-hidden="true">
+    <aside id="skillTreePanel" class="side-panel side-panel-left" aria-hidden="true">
         <div class="panel-header">
             <div>
                 <p class="panel-kicker">Long-term growth</p>
                 <h2>Skill tree</h2>
             </div>
-            <button class="panel-close" type="button" data-close-panel aria-label="Close skill tree">×</button>
+            <button class="panel-close" type="button" data-close-panel aria-label="Close skill tree">x</button>
         </div>
         <div class="panel-content">
             <div class="skill-branch">
@@ -219,4 +227,5 @@
             <p>New abilities will unlock here in a future update.</p>
         </div>
     </aside>
+    </body>
 </html>
