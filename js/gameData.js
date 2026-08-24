@@ -1,180 +1,37 @@
 // gameData.js
 
-export const plant = {
-    health: 100,
-    healthFactor: 0,
-    water: 50,
-    sunlight: 50,
-    nutriments: 50,
-    growth: 0,
-    stage: 'seed',
-    level: 1,
-    growthPoints: 1
-};
+import { plant, weather, bugs, game } from "./state.js";
+import { addResource, updatePlant as updatePlantState } from "./plant.js";
+import { rollBugs as rollBugsState } from "./bugs.js";
+import { rollWeather as rollWeatherState, updateSeason } from "./weather.js";
+import { loadGameState, resetGameState as resetSavedGame, saveGameState as saveState } from "./persistence.js";
 
-export const weather = {
-    type: "Sunny",
-    daysRemaining: 0,
-    duration: 0
-};
+export { plant, weather, bugs, game };
 
-export const bugs = {
-    type: "None",
-    passedToday: 0
-};
+const state = { plant, weather, bugs, game };
 
-export const game = {
-    day: 1,
-    season: "Spring"
-};
-
-const saveKey = "floraeGameState";
-const daysPerSeason = 10;
-
-const bugTypes = {
-    Worm: { weight: 5, nutriments: 3 },
-    Locust: { weight: 3, nutriments: 1 },
-    Beetle: { weight: 2, nutriments: 2 },
-    Ladybug: { weight: 1, nutriments: 2 }
-};
-
-const seasonalWeather = {
-    Spring: {
-        Sunny: 10,
-        Foggy: 1,
-        Cloudy: 3,
-        Rainy: 4,
-        HeavyRain: 1,
-        ThunderStorm: 1
-    },
-    Summer: {
-        Sunny: 13,
-        Foggy: 1,
-        Cloudy: 2,
-        Rainy: 2,
-        HeavyRain: 1,
-        ThunderStorm: 1
-    },
-    Autumn: {
-        Sunny: 8,
-        Foggy: 3,
-        Cloudy: 3,
-        Rainy: 4,
-        HeavyRain: 1,
-        ThunderStorm: 1
-    },
-    Winter: {
-        Sunny: 3,
-        Foggy: 6,
-        Cloudy: 4,
-        Rainy: 3,
-        HeavyRain: 2,
-        ThunderStorm: 2
-    }
-};
-
-function getSeason(day) {
-    const seasons = Object.keys(seasonalWeather);
-    const seasonIndex = Math.floor((day - 1) / daysPerSeason) % seasons.length;
-
-    return seasons[seasonIndex];
-}
-
-function rollWeatherType(weights) {
-    const totalWeight = Object.values(weights).reduce((total, weight) => total + weight, 0);
-    let roll = Math.floor(Math.random() * totalWeight) + 1;
-
-    for (const [type, weight] of Object.entries(weights)) {
-        roll -= weight;
-
-        if (roll <= 0) {
-            return type;
-        }
-    }
-}
-
-function loadGameState() {
-    const savedState = localStorage.getItem(saveKey);
-
-    if (!savedState) {
-        return;
-    }
-
-    try {
-        const parsedState = JSON.parse(savedState);
-
-        if (parsedState.plant && parsedState.weather && parsedState.game) {
-            Object.assign(plant, parsedState.plant);
-            Object.assign(weather, parsedState.weather);
-            Object.assign(bugs, parsedState.bugs);
-            Object.assign(game, parsedState.game);
-        }
-    } catch {
-        localStorage.removeItem(saveKey);
-    }
-}
+loadGameState(state);
 
 export function saveGameState() {
-    localStorage.setItem(saveKey, JSON.stringify({ plant, weather, bugs, game }));
+    saveState(state);
 }
 
 export function resetGameState() {
-    localStorage.removeItem(saveKey);
-
-    Object.assign(plant, {
-        health: 100,
-        healthFactor: 0,
-        water: 50,
-        sunlight: 50,
-        nutriments: 50,
-        growth: 0,
-        stage: 'seed',
-        level: 1,
-        growthPoints: 1
-    });
-
-    Object.assign(weather, { type: "Sunny", daysRemaining: 0, duration: 0 });
-    Object.assign(bugs, { type: "None", passedToday: 0 });
-    Object.assign(game, { day: 1, season: "Spring" });
+    resetSavedGame(state);
 }
 
-loadGameState();
-
 export function rollWeather() {
-    const duration = Math.floor(Math.random() * 10) + 1;
-    const type = rollWeatherType(seasonalWeather[game.season]);
-
-    weather.type = type;
-    weather.duration = duration;
-    weather.daysRemaining = duration;
+    rollWeatherState(weather, game);
     saveGameState();
 }
 
 export function rollBugs() {
-    const bugChance = Math.floor(Math.random() * 100) + 1;
-    bugs.type = "None";
-    bugs.passedToday = 0;
-
-    if (bugChance >= 50) {
-        bugs.passedToday = Math.floor(Math.random() * 3) + 1;
-        const totalWeight = Object.values(bugTypes).reduce((total, bug) => total + bug.weight, 0);
-        let typeRoll = Math.floor(Math.random() * totalWeight) + 1;
-
-        for (const [type, bug] of Object.entries(bugTypes)) {
-            typeRoll -= bug.weight;
-
-            if (typeRoll <= 0) {
-                bugs.type = type;
-                plant.nutriments += bugs.passedToday * bug.nutriments;
-                break;
-            }
-        }
-    }
+    rollBugsState(bugs, plant);
 }
 
 export function advanceGameDay() {
     game.day += 1;
-    game.season = getSeason(game.day);
+    updateSeason(game);
 
     if (weather.daysRemaining <= 0) {
         rollWeather();
@@ -182,125 +39,26 @@ export function advanceGameDay() {
 
     weather.daysRemaining -= 1;
     rollBugs();
-    updatePlant();
+    updatePlantState(plant, weather);
     saveGameState();
 }
-
-
 
 export function waterPlant(amount) {
-
-    plant.water += amount;
-
-    if (plant.water > 100) {
-        plant.water = 100;
-    }
-
+    addResource(plant, "water", amount);
     saveGameState();
 }
 
-
 export function giveSunlight(amount) {
-
-    plant.sunlight += amount;
-
-    if (plant.sunlight > 100) {
-        plant.sunlight = 100;
-    }
-
+    addResource(plant, "sunlight", amount);
     saveGameState();
 }
 
 export function giveNutriments(amount) {
-
-    plant.nutriments += amount;
-
-    if (plant.nutriments > 100) {
-        plant.nutriments = 100;
-    }
-
+    addResource(plant, "nutriments", amount);
     saveGameState();
-}   
-
-
+}
 
 export function updatePlant() {
-
-    // ressources decrease over time
-    //plant.water -= 1;
-    //plant.sunlight -= 1;
-    plant.nutriments -= 1;
-
-    // weather effects on resources
-    
-    switch (weather.type) {
-        case "ThunderStorm": plant.water += 15, plant.sunlight -= 10, plant.health -= 10; break;
-        case "HeavyRain": plant.water += 15, plant.sunlight -= 10, plant.health -= 5; break;
-        case "Rainy": plant.water += 5, plant.sunlight -= 5; break;
-        case "Cloudy": plant.water += 5, plant.sunlight += 2 ; break;
-        case "Foggy": plant.water += 2, plant.sunlight -= 7; break;
-        case "Sunny": plant.water -= 5, plant.sunlight += 10; break;
-    }
-        
-        
-        
-
-    // Keep values between 0 and 100
-
-    plant.water = Math.min(100, Math.max(0, plant.water));
-    plant.sunlight = Math.min(100, Math.max(0, plant.sunlight));
-    plant.nutriments = Math.min(100, Math.max(0, plant.nutriments));
-
-    // Recalculate the modifier from current resources so it can recover.
-    plant.healthFactor = 0;
-
-    // If conditions are bad, health decreases
-
-    // Recalculate the penalty from the current resource levels so it can recover.
-   
-    for (const resource of [plant.water, plant.sunlight, plant.nutriments]) {
-        if (resource === 0) {
-            plant.healthFactor -= 2;
-        } else if (resource < 30) {
-            plant.healthFactor -= 1;
-        }
-    }
-
-    if (plant.healthFactor === 0) {
-        for (const resource of [plant.water, plant.sunlight, plant.nutriments]) {
-            if (resource > 70) {
-                plant.healthFactor += 1;
-            }
-        }
-    }
-
-    const resourcesHealthy = plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30;
-    const healingAmount = resourcesHealthy
-        ? 5 + Math.max(0, plant.healthFactor)
-        : plant.healthFactor;
-
-    plant.health += healingAmount;
-
-    // Growth is faster when more resources are above the healthy range.
-    if (plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30 && plant.health > 30) {
-        plant.growth += 10 + Math.max(0, plant.healthFactor) * 2;
-    }
-
-    // Don't go below zero
-
-    plant.health = Math.min(100, Math.max(0, plant.health));
-
-    // Don't grow past 100
-
-    plant.growth = Math.min(100, plant.growth);
-
-    if (plant.growth === 100) {
-
-        plant.level += 1;
-        plant.growthPoints += 1;
-        plant.growth = 0;
-        //resizePlantImage(plant.stage);
-    }
-
+    updatePlantState(plant, weather);
 }
 

@@ -12,9 +12,9 @@ export function startGameClock() {
     setInterval(() => {
 
         advanceGameDay();
-
         updateUI();
         console.log("a day has passed. Current day: " + game.day + ", days remaining for current weather: " + weather.daysRemaining + " (" + weather.type + ")");
+        
     }, 5000);
 
 }
