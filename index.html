@@ -121,27 +121,45 @@
         </div>
 
         <h3>Debug Actions</h3>
-        <!-- Actions -->
+        <p>
+            Health Factor:
+            <span id="HealthFactorValue">0</span>
+        </p>
+       
         <div class="actions">
 
-            
-
             <button id="waterButton">
-                Water
+                + Water
             </button>
 
             <button id="sunButton">
-                Sun
+                + Sunlight
             </button>
 
             <button id="nutrimentsButton">
-                Nutriments
+                + Nutriments
             </button>
 
-            <button id="resetButton" type="button" style="background-color: rgb(104, 0, 0); color: white;">
-                Reset
+        
+        </div>
+        <br>
+        <div class="action"> 
+            <button id="waterButtonNegative">
+                - water                
+            </button>
+            <button id="sunButtonNegative">
+                - Sunlight
+            </button>
+
+            <button id="nutrimentsButtonNegative">
+                - Nutriments
             </button>
         </div>
+        <br>
+        <button id="resetButton" type="button" style="background-color: rgb(104, 0, 0); color: white;">
+            Reset
+        </button>
+
 
         <div id="message">
             Take care of your plant!

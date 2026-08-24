@@ -2,6 +2,7 @@
 
 export const plant = {
     health: 100,
+    healthFactor: 0,
     water: 50,
     sunlight: 50,
     nutriments: 50,
@@ -122,6 +123,7 @@ export function resetGameState() {
 
     Object.assign(plant, {
         health: 100,
+        healthFactor: 0,
         water: 50,
         sunlight: 50,
         nutriments: 50,
@@ -153,7 +155,7 @@ export function rollBugs() {
     bugs.type = "None";
     bugs.passedToday = 0;
 
-    if (bugChance <= 10) {
+    if (bugChance >= 50) {
         bugs.passedToday = Math.floor(Math.random() * 3) + 1;
         const totalWeight = Object.values(bugTypes).reduce((total, bug) => total + bug.weight, 0);
         let typeRoll = Math.floor(Math.random() * totalWeight) + 1;
@@ -249,35 +251,44 @@ export function updatePlant() {
     plant.sunlight = Math.min(100, Math.max(0, plant.sunlight));
     plant.nutriments = Math.min(100, Math.max(0, plant.nutriments));
 
-    // If the plant has enough resources,
-    // it grows.
-
-    if (plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30 && plant.health > 30) {
-
-        plant.growth += 10;
-        
-
-    }
+    // Recalculate the modifier from current resources so it can recover.
+    plant.healthFactor = 0;
 
     // If conditions are bad, health decreases
 
-    if (plant.water === 0 || plant.sunlight === 0 || plant.nutriments === 0) {
-
-        plant.health -= 2;
-
+    // Recalculate the penalty from the current resource levels so it can recover.
+   
+    for (const resource of [plant.water, plant.sunlight, plant.nutriments]) {
+        if (resource === 0) {
+            plant.healthFactor -= 2;
+        } else if (resource < 30) {
+            plant.healthFactor -= 1;
+        }
     }
 
-    // If conditions are good, health increases
-
-    if (plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30 && plant.health < 100) {
-
-        plant.health += 5;
+    if (plant.healthFactor === 0) {
+        for (const resource of [plant.water, plant.sunlight, plant.nutriments]) {
+            if (resource > 70) {
+                plant.healthFactor += 1;
+            }
+        }
     }
 
+    const resourcesHealthy = plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30;
+    const healingAmount = resourcesHealthy
+        ? 5 + Math.max(0, plant.healthFactor)
+        : plant.healthFactor;
+
+    plant.health += healingAmount;
+
+    // Growth is faster when more resources are above the healthy range.
+    if (plant.water > 30 && plant.sunlight > 30 && plant.nutriments > 30 && plant.health > 30) {
+        plant.growth += 10 + Math.max(0, plant.healthFactor) * 2;
+    }
 
     // Don't go below zero
 
-    plant.health = Math.max(0, plant.health);
+    plant.health = Math.min(100, Math.max(0, plant.health));
 
     // Don't grow past 100
 

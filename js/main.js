@@ -7,6 +7,11 @@ import { startGameClock } from "./gameClock.js";
 const waterButton = document.getElementById("waterButton");
 const sunButton = document.getElementById("sunButton");
 const nutrimentsButton = document.getElementById("nutrimentsButton");
+
+const waterButtonNegative = document.getElementById("waterButtonNegative");
+const sunButtonNegative = document.getElementById("sunButtonNegative");
+const nutrimentsButtonNegative = document.getElementById("nutrimentsButtonNegative");
+
 const resetButton = document.getElementById("resetButton");
 
 const growthPointsValue = document.getElementById("growthPoints");
@@ -19,6 +24,7 @@ const growthValue = document.getElementById("growthValue");
 const stageValue = document.getElementById("stageValue");
 const levelValue = document.getElementById("levelValue");
 const healthValue = document.getElementById("healthValue");
+const healthFactorValue = document.getElementById("HealthFactorValue");
 
 const weatherValue = document.getElementById("weatherValue");
 const weatherDurationValue = document.getElementById("weatherDurationValue");
@@ -59,6 +65,21 @@ resetButton.addEventListener("click", () => {
     }
 });
 
+waterButtonNegative.addEventListener("click", () => {
+
+    waterPlant(-20);
+    updateUI();
+});
+sunButtonNegative.addEventListener("click", () => {
+
+    giveSunlight(-20);
+    updateUI();
+});
+nutrimentsButtonNegative.addEventListener("click", () => {
+    giveNutriments(-20);
+    updateUI();
+});
+
 
 export function updateUI() {
 
@@ -72,7 +93,7 @@ export function updateUI() {
     stageValue.textContent = plant.stage;
     levelValue.textContent = plant.level;
     healthValue.textContent = plant.health;
-    
+    healthFactorValue.textContent = plant.healthFactor;
     growthPointsValue.textContent = plant.growthPoints;
 
     weatherValue.textContent = weather.type;
