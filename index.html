@@ -168,5 +168,55 @@
     </div>
 
 </body>
+    <button id="upgradeButton" class="side-tab side-tab-left" type="button" aria-controls="upgradePanel" aria-expanded="false">
+        <span aria-hidden="true">⚙</span>
+        <span>Upgrades</span>
+    </button>
 
+    <button id="skillTreeButton" class="side-tab side-tab-right" type="button" aria-controls="skillTreePanel" aria-expanded="false">
+        <span aria-hidden="true">✦</span>
+        <span>Skill tree</span>
+    </button>
+
+    <div id="panelBackdrop" class="panel-backdrop" hidden></div>
+
+    <aside id="upgradePanel" class="side-panel side-panel-left" aria-hidden="true">
+        <div class="panel-header">
+            <div>
+                <p class="panel-kicker">Plant development</p>
+                <h2>Upgrades</h2>
+            </div>
+            <button class="panel-close" type="button" data-close-panel aria-label="Close upgrades">×</button>
+        </div>
+        <div class="panel-content">
+            <div class="panel-empty-icon" aria-hidden="true">⚙</div>
+            <h3>Stronger roots, brighter leaves</h3>
+            <p>Upgrade choices will appear here as your plant grows.</p>
+            <div class="placeholder-list">
+                <div class="placeholder-row"><span>Root system</span><span>Coming soon</span></div>
+                <div class="placeholder-row"><span>Leaf vitality</span><span>Coming soon</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <aside id="skillTreePanel" class="side-panel side-panel-right" aria-hidden="true">
+        <div class="panel-header">
+            <div>
+                <p class="panel-kicker">Long-term growth</p>
+                <h2>Skill tree</h2>
+            </div>
+            <button class="panel-close" type="button" data-close-panel aria-label="Close skill tree">×</button>
+        </div>
+        <div class="panel-content">
+            <div class="skill-branch">
+                <div class="skill-node skill-node-active">🌱</div>
+                <div class="skill-line"></div>
+                <div class="skill-node">✦</div>
+                <div class="skill-line"></div>
+                <div class="skill-node skill-node-locked">?</div>
+            </div>
+            <h3>Your plant's path</h3>
+            <p>New abilities will unlock here in a future update.</p>
+        </div>
+    </aside>
 </html>

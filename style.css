@@ -16,6 +16,208 @@
             color: white;
         }
 
+        .side-tab {
+            position: fixed;
+            top: 50%;
+            z-index: 10;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 42px;
+            padding: 14px 8px;
+
+            background: #2b5838;
+            border: 1px solid #6ca878;
+            border-radius: 10px;
+            color: #e8f7df;
+            font-size: 11px;
+            font-weight: bold;
+            writing-mode: vertical-rl;
+            transform: translateY(-50%);
+        }
+
+        .side-tab span:first-child {
+            font-size: 18px;
+            writing-mode: horizontal-tb;
+        }
+
+        .side-tab-left {
+            left: 14px;
+        }
+
+        .side-tab-right {
+            right: 14px;
+        }
+
+        .side-tab:hover {
+            background: #3f8250;
+        }
+
+        .panel-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 15;
+            background: rgba(5, 15, 9, 0.62);
+        }
+
+        .side-panel {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            z-index: 20;
+            width: min(360px, 88vw);
+            padding: 28px;
+            background: #1b3524;
+            border-color: #5d9866;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.35);
+            transition: transform 0.25s ease;
+        }
+
+        .side-panel-left {
+            left: 0;
+            border-right: 2px solid;
+            transform: translateX(-100%);
+        }
+
+        .side-panel-right {
+            right: 0;
+            border-left: 2px solid;
+            transform: translateX(100%);
+        }
+
+        .side-panel.is-open {
+            transform: translateX(0);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #315c3c;
+        }
+
+        .panel-kicker {
+            margin: 0 0 6px;
+            color: #8ee695;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .panel-header h2,
+        .panel-content h3 {
+            margin: 0;
+        }
+
+        .panel-close {
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            font-size: 25px;
+            line-height: 1;
+        }
+
+        .panel-content {
+            padding-top: 30px;
+            color: #c5dfc7;
+        }
+
+        .panel-content p {
+            color: #a9c5ad;
+            font-weight: normal;
+            line-height: 1.5;
+        }
+
+        .panel-empty-icon {
+            display: grid;
+            place-items: center;
+            width: 72px;
+            height: 72px;
+            margin-bottom: 22px;
+            background: #142a1b;
+            border: 1px solid #477b50;
+            border-radius: 50%;
+            color: #ffd166;
+            font-size: 32px;
+        }
+
+        .placeholder-list {
+            margin-top: 28px;
+            border-top: 1px solid #315c3c;
+        }
+
+        .placeholder-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid #315c3c;
+            font-size: 13px;
+        }
+
+        .placeholder-row span:last-child {
+            color: #79aa7d;
+            font-weight: normal;
+        }
+
+        .skill-branch {
+            display: flex;
+            align-items: center;
+            margin-bottom: 34px;
+        }
+
+        .skill-node {
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: 54px;
+            height: 54px;
+            background: #315c3c;
+            border: 2px solid #77bf7d;
+            border-radius: 50%;
+            color: #e8f7df;
+            font-size: 21px;
+        }
+
+        .skill-node-locked {
+            border-color: #49684d;
+            color: #719074;
+        }
+
+        .skill-line {
+            flex: 1;
+            height: 2px;
+            background: #5d9866;
+        }
+
+        @media (max-width: 600px) {
+            .side-tab {
+                top: auto;
+                bottom: 14px;
+                width: auto;
+                padding: 10px 12px;
+                writing-mode: horizontal-tb;
+                transform: none;
+            }
+
+            .side-tab span:first-child {
+                font-size: 16px;
+            }
+
+            .side-tab-left {
+                left: 14px;
+            }
+
+            .side-tab-right {
+                right: 14px;
+            }
+        }
+
         .game {
             width: 400px;
             padding: 30px;

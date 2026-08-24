@@ -13,6 +13,11 @@ const sunButtonNegative = document.getElementById("sunButtonNegative");
 const nutrimentsButtonNegative = document.getElementById("nutrimentsButtonNegative");
 
 const resetButton = document.getElementById("resetButton");
+const upgradeButton = document.getElementById("upgradeButton");
+const skillTreeButton = document.getElementById("skillTreeButton");
+const panelBackdrop = document.getElementById("panelBackdrop");
+const sidePanels = document.querySelectorAll(".side-panel");
+const closePanelButtons = document.querySelectorAll("[data-close-panel]");
 
 const growthPointsValue = document.getElementById("growthPoints");
 
@@ -78,6 +83,51 @@ sunButtonNegative.addEventListener("click", () => {
 nutrimentsButtonNegative.addEventListener("click", () => {
     giveNutriments(-20);
     updateUI();
+});
+
+function openPanel(panel, button) {
+    sidePanels.forEach((otherPanel) => {
+        otherPanel.classList.remove("is-open");
+        otherPanel.setAttribute("aria-hidden", "true");
+    });
+
+    [upgradeButton, skillTreeButton].forEach((otherButton) => {
+        otherButton.setAttribute("aria-expanded", "false");
+    });
+
+    panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
+    button.setAttribute("aria-expanded", "true");
+    panelBackdrop.hidden = false;
+}
+
+function closePanels() {
+    sidePanels.forEach((panel) => {
+        panel.classList.remove("is-open");
+        panel.setAttribute("aria-hidden", "true");
+    });
+
+    [upgradeButton, skillTreeButton].forEach((button) => {
+        button.setAttribute("aria-expanded", "false");
+    });
+
+    panelBackdrop.hidden = true;
+}
+
+upgradeButton.addEventListener("click", () => {
+    openPanel(document.getElementById("upgradePanel"), upgradeButton);
+});
+
+skillTreeButton.addEventListener("click", () => {
+    openPanel(document.getElementById("skillTreePanel"), skillTreeButton);
+});
+
+panelBackdrop.addEventListener("click", closePanels);
+closePanelButtons.forEach((button) => button.addEventListener("click", closePanels));
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closePanels();
+    }
 });
 
 
