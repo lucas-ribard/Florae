@@ -2,8 +2,10 @@
 
 import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade } from "./gameData.js";
 import { startGameClock } from "./gameClock.js";
+import { createPlantSvg } from "./plantSvg.js";
 
 
+const plantVisual = document.getElementById("plant");
 const waterButton = document.getElementById("waterButton");
 const sunButton = document.getElementById("sunButton");
 const nutrimentsButton = document.getElementById("nutrimentsButton");
@@ -140,6 +142,7 @@ upgradeBuyButtons.forEach((button) => {
 
 
 export function updateUI() {
+    plantVisual.innerHTML = createPlantSvg(plant, game.upgrades);
 
     // states values
     waterValue.textContent = plant.water;

@@ -7,7 +7,8 @@ export const plant = {
     growth: 0,
     stage: 'seed',
     level: 1,
-    growthPoints: 1
+    growthPoints: 1,
+    visualSeed: Math.floor(Math.random() * 0xFFFFFFFF)
 };
 
 export const weather = {

@@ -1,5 +1,16 @@
 const saveKey = "floraeGameState";
 
+function hashString(value) {
+    let hash = 2166136261;
+
+    for (let index = 0; index < value.length; index += 1) {
+        hash ^= value.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+    }
+
+    return hash >>> 0;
+}
+
 export function loadGameState(state) {
     const savedState = localStorage.getItem(saveKey);
 
@@ -12,6 +23,9 @@ export function loadGameState(state) {
 
         if (parsedState.plant && parsedState.weather && parsedState.game) {
             Object.assign(state.plant, parsedState.plant);
+            if (!Number.isSafeInteger(state.plant.visualSeed)) {
+                state.plant.visualSeed = hashString(savedState);
+            }
             Object.assign(state.weather, parsedState.weather);
             Object.assign(state.bugs, parsedState.bugs);
             Object.assign(state.game, parsedState.game);
@@ -37,7 +51,8 @@ export function resetGameState(state) {
         growth: 0,
         stage: 'seed',
         level: 1,
-        growthPoints: 1
+        growthPoints: 1,
+        visualSeed: Math.floor(Math.random() * 0xFFFFFFFF)
     });
 
     Object.assign(state.weather, { type: "Sunny", daysRemaining: 0, duration: 0 });
