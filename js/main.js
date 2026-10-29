@@ -1,6 +1,6 @@
 // main.js
 
-import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade, adjustDebugValue, advanceGameDay } from "./gameData.js";
+import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade, purchaseSkill, adjustDebugValue, advanceGameDay } from "./gameData.js";
 import { startGameClock } from "./gameClock.js";
 import { createPlantSvg, getPlantVisualStats } from "./plantSvg.js";
 import { getPlantGrowthStage } from "./plant.js";
@@ -22,8 +22,12 @@ const panelBackdrop = document.getElementById("panelBackdrop");
 const sidePanels = document.querySelectorAll(".side-panel");
 const closePanelButtons = document.querySelectorAll("[data-close-panel]");
 const upgradeBuyButtons = document.querySelectorAll("[data-upgrade]");
+const skillBuyButtons = document.querySelectorAll("[data-skill]");
 const debugValueButtons = document.querySelectorAll("[data-debug-stat]");
 const advanceDayButton = document.getElementById("debugAdvanceDay");
+const debugToggle = document.getElementById("debugToggle");
+const debugPanel = document.getElementById("debugPanel");
+const debugToggleLabel = document.getElementById("debugToggleLabel");
 const plantStatsToggle = document.getElementById("plantStatsToggle");
 const plantStatsPanel = document.getElementById("plantStatsPanel");
 
@@ -52,6 +56,13 @@ plantStatsToggle.addEventListener("click", () => {
     const isExpanded = plantStatsToggle.getAttribute("aria-expanded") === "true";
     plantStatsToggle.setAttribute("aria-expanded", String(!isExpanded));
     plantStatsPanel.hidden = isExpanded;
+});
+
+debugToggle.addEventListener("click", () => {
+    const isExpanded = debugToggle.getAttribute("aria-expanded") === "true";
+    debugToggle.setAttribute("aria-expanded", String(!isExpanded));
+    debugPanel.hidden = isExpanded;
+    debugToggleLabel.textContent = isExpanded ? "Show" : "Hide";
 });
 
 waterButton.addEventListener("click", () => {
@@ -152,6 +163,13 @@ upgradeBuyButtons.forEach((button) => {
     });
 });
 
+skillBuyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        purchaseSkill(button.dataset.skill, Number(button.dataset.skillRank));
+        updateUI();
+    });
+});
+
 debugValueButtons.forEach((button) => {
     button.addEventListener("click", () => {
         adjustDebugValue(button.dataset.debugStat, Number(button.dataset.debugAmount));
@@ -166,8 +184,9 @@ advanceDayButton.addEventListener("click", () => {
 
 
 export function updateUI() {
-    plantVisual.innerHTML = createPlantSvg(plant, game.upgrades);
-    const visualStats = getPlantVisualStats(plant, game.upgrades);
+    const plantUpgrades = { ...game.upgrades, skillTree: game.skillTree };
+    plantVisual.innerHTML = createPlantSvg(plant, plantUpgrades);
+    const visualStats = getPlantVisualStats(plant, plantUpgrades);
 
     document.getElementById("plantStatsLevel").textContent = plant.level;
     document.getElementById("plantStatsGrowthStage").textContent = getPlantGrowthStage(plant.level).name;
@@ -175,8 +194,11 @@ export function updateUI() {
     document.getElementById("plantStatsSunlightYield").textContent = `+${20 + game.upgrades.leaf} per action`;
     document.getElementById("plantStatsLeafAbsorption").textContent = `+${visualStats.naturalLeafCount} per day`;
     document.getElementById("plantStatsRootUpgrade").textContent = game.upgrades.roots;
-    document.getElementById("plantStatsWaterYield").textContent = `+${20 + game.upgrades.roots} per action`;
-    document.getElementById("plantStatsNutrimentYield").textContent = `+${20 + game.upgrades.roots} per action`;
+    document.getElementById("plantStatsWaterYield").textContent = `+${20 + game.upgrades.roots + visualStats.strongRootYieldBonus} per action`;
+    document.getElementById("plantStatsNutrimentYield").textContent = `+${20 + game.upgrades.roots + visualStats.strongRootYieldBonus} per action`;
+    document.getElementById("plantStatsStrongRoots").textContent = visualStats.strongRootLevel;
+    document.getElementById("plantStatsBarkProtection").textContent = `−${visualStats.barkThunderstormReduction} Thunderstorm / −${visualStats.barkHeavyRainReduction} Heavy Rain`;
+    document.getElementById("plantStatsHeartwoodGrowth").textContent = `+${visualStats.heartwoodGrowthBonus} per healthy day`;
     document.getElementById("plantStatsVitalityUpgrade").textContent = game.upgrades.vitality;
     document.getElementById("plantStatsHealingBonus").textContent = `+${game.upgrades.vitality} per day`;
     document.getElementById("plantStatsNaturalLeaves").textContent = visualStats.naturalLeafCount;
@@ -185,6 +207,12 @@ export function updateUI() {
     document.getElementById("plantStatsStemWidth").textContent = visualStats.stemWidth ? `${visualStats.stemWidth.toFixed(1)} units` : "Not yet grown";
     document.getElementById("plantStatsLeaves").textContent = visualStats.leafCount;
     document.getElementById("plantStatsRoots").textContent = visualStats.rootCount;
+    document.getElementById("plantStatsBranches").textContent = visualStats.branchCount;
+    document.getElementById("plantStatsUpgradeLeaves").textContent = visualStats.leafUpgradeLeaves;
+    document.getElementById("plantStatsFlowers").textContent = visualStats.flowerUnlocked && visualStats.stemHeight > 0
+        ? 1 + (visualStats.branchFlowerUnlocked ? visualStats.branchLevel : 0)
+        : 0;
+    document.getElementById("branchLeafMultiplier").textContent = `${visualStats.nextLeafUpgradeLeaves} ${visualStats.nextLeafUpgradeLeaves === 1 ? "leaf" : "leaves"}`;
 
     // states values
     waterValue.textContent = plant.water;
@@ -204,6 +232,33 @@ export function updateUI() {
     upgradeBuyButtons.forEach((button) => {
         const upgrade = button.dataset.upgrade;
         button.disabled = plant.growthPoints < getUpgradeCost(upgrade);
+    });
+
+    skillBuyButtons.forEach((button) => {
+        const skill = button.dataset.skill;
+        const rank = Number(button.dataset.skillRank);
+        const currentRank = game.skillTree[skill];
+        const purchased = rank <= currentRank;
+        const branchLocked = skill === "branchFlower" && game.skillTree.branch === 0;
+        const flowerLocked = (skill === "branchFlower" || skill === "flowerStyle") && game.skillTree.flower === 0;
+        const available = !purchased
+            && rank === currentRank + 1
+            && !branchLocked
+            && !flowerLocked
+            && game.skillPoints >= 1;
+
+        button.disabled = !available;
+        button.classList.toggle("skill-node-purchased", purchased);
+        button.classList.toggle("skill-node-available", available);
+        const status = purchased ? "Purchased" : available ? "Available for 1 skill point" : "Locked";
+        button.setAttribute("aria-label", `${button.dataset.skillLabel}, rank ${rank}, ${status.toLowerCase()}`);
+        button.title = `${button.dataset.skillLabel} (${status})`;
+
+        if (button.classList.contains("skill-node")) {
+            button.textContent = purchased ? "✓" : rank;
+        } else {
+            button.querySelector(".skill-purchase-state").textContent = purchased ? "Unlocked" : available ? "Unlock · 1 pt" : "Locked";
+        }
     });
 
     document.querySelectorAll("[data-upgrade-level]").forEach((levelValue) => {

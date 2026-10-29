@@ -62,10 +62,11 @@ export function getNaturalGrowthStats(level) {
 export function updatePlant(plant, weather, upgrades) {
     plant.nutriments -= 1;
     plant.sunlight += getNaturalGrowthStats(plant.level).naturalLeafCount;
+    const barkProtection = Math.min(3, Math.max(0, upgrades.skillTree?.bark ?? 0));
 
     switch (weather.type) {
-        case "ThunderStorm": plant.water += 15; plant.sunlight -= 10; plant.health -= 10; break;
-        case "HeavyRain": plant.water += 15; plant.sunlight -= 10; plant.health -= 5; break;
+        case "ThunderStorm": plant.water += 15; plant.sunlight -= 10; plant.health -= Math.max(0, 10 - barkProtection * 2); break;
+        case "HeavyRain": plant.water += 15; plant.sunlight -= 10; plant.health -= Math.max(0, 5 - barkProtection); break;
         case "Rainy": plant.water += 5; plant.sunlight -= 5; break;
         case "Cloudy": plant.water += 5; plant.sunlight += 2; break;
         case "Foggy": plant.water += 2; plant.sunlight -= 7; break;
@@ -101,7 +102,7 @@ export function updatePlant(plant, weather, upgrades) {
     plant.health += healingAmount;
 
     if (resourcesHealthy && plant.health > 30) {
-        plant.growth += 10 + Math.max(0, plant.healthFactor) * 2;
+        plant.growth += 10 + Math.max(0, plant.healthFactor) * 2 + Math.max(0, upgrades.skillTree?.heartwood ?? 0);
     }
 
     plant.health = clamp(plant.health);

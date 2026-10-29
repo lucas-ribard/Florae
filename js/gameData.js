@@ -20,6 +20,32 @@ game.skillPoints = Number.isSafeInteger(game.skillPoints) ? Math.max(0, game.ski
 game.stageChangeRemainder = Number.isSafeInteger(game.stageChangeRemainder)
     ? Math.max(0, game.stageChangeRemainder) % 3
     : 0;
+const branchLevel = Math.min(5, Math.max(0, Number.isSafeInteger(game.skillTree?.branch) ? game.skillTree.branch : 0));
+const leafUpgradeLevel = Math.max(0, Number.isSafeInteger(game.upgrades.leaf) ? game.upgrades.leaf : 0);
+const savedBranchMilestones = game.skillTree?.branchLeafMilestones;
+game.skillTree = {
+    branch: branchLevel,
+    branchLeafMilestones: Array.from({ length: branchLevel }, (_, index) => {
+        const milestone = Array.isArray(savedBranchMilestones) ? savedBranchMilestones[index] : undefined;
+        return Number.isSafeInteger(milestone)
+            ? Math.min(leafUpgradeLevel, Math.max(0, milestone))
+            : leafUpgradeLevel;
+    }),
+    flower: game.skillTree?.flower ? 1 : 0,
+    branchFlower: game.skillTree?.branchFlower ? 1 : 0,
+    flowerStyle: Math.min(3, Math.max(0, Number.isSafeInteger(game.skillTree?.flowerStyle) ? game.skillTree.flowerStyle : 0)),
+    bark: Math.min(3, Math.max(0, Number.isSafeInteger(game.skillTree?.bark) ? game.skillTree.bark : 0)),
+    strongRoots: Math.min(3, Math.max(0, Number.isSafeInteger(game.skillTree?.strongRoots) ? game.skillTree.strongRoots : 0)),
+    heartwood: Math.min(3, Math.max(0, Number.isSafeInteger(game.skillTree?.heartwood) ? game.skillTree.heartwood : 0))
+};
+
+function getGameplayUpgrades() {
+    return {
+        ...game.upgrades,
+        roots: game.upgrades.roots + game.skillTree.strongRoots * 2,
+        skillTree: game.skillTree
+    };
+}
 
 function awardStageChangePoints(previousLevel, currentLevel) {
     game.stageChangeRemainder += countPlantStageChanges(previousLevel, currentLevel);
@@ -44,7 +70,7 @@ export function rollWeather() {
 }
 
 export function rollBugs() {
-    rollBugsState(bugs, plant, game.upgrades);
+    rollBugsState(bugs, plant, getGameplayUpgrades());
 }
 
 export function advanceGameDay() {
@@ -58,28 +84,28 @@ export function advanceGameDay() {
     weather.daysRemaining -= 1;
     rollBugs();
     const previousLevel = plant.level;
-    updatePlantState(plant, weather, game.upgrades);
+    updatePlantState(plant, weather, getGameplayUpgrades());
     awardStageChangePoints(previousLevel, plant.level);
     saveGameState();
 }
 
 export function waterPlant(amount) {
-    addResource(plant, "water", amount, game.upgrades);
+    addResource(plant, "water", amount, getGameplayUpgrades());
     saveGameState();
 }
 
 export function giveSunlight(amount) {
-    addResource(plant, "sunlight", amount, game.upgrades);
+    addResource(plant, "sunlight", amount, getGameplayUpgrades());
     saveGameState();
 }
 
 export function giveNutriments(amount) {
-    addResource(plant, "nutriments", amount, game.upgrades);
+    addResource(plant, "nutriments", amount, getGameplayUpgrades());
     saveGameState();
 }
 
 export function updatePlant() {
-    updatePlantState(plant, weather, game.upgrades);
+    updatePlantState(plant, weather, getGameplayUpgrades());
 }
 
 export function adjustDebugValue(stat, amount) {
@@ -90,6 +116,9 @@ export function adjustDebugValue(stat, amount) {
     switch (stat) {
         case "growthPoints":
             plant.growthPoints = Math.max(0, plant.growthPoints + amount);
+            break;
+        case "skillPoints":
+            game.skillPoints = Math.max(0, game.skillPoints + amount);
             break;
         case "growth": {
             const previousLevel = plant.level;
@@ -130,6 +159,32 @@ export function purchaseUpgrade(upgrade) {
 
     plant.growthPoints -= cost;
     game.upgrades[upgrade] += 1;
+    saveGameState();
+    return true;
+}
+
+export function purchaseSkill(skill, rank = 1) {
+    const skillTree = game.skillTree;
+    const skillRequirements = {
+        branch: skillTree.branch < 5 && rank === skillTree.branch + 1,
+        flower: skillTree.flower === 0 && rank === 1,
+        branchFlower: skillTree.branch > 0 && skillTree.flower > 0 && skillTree.branchFlower === 0 && rank === 1,
+        flowerStyle: skillTree.flower > 0 && skillTree.flowerStyle < 3 && rank === skillTree.flowerStyle + 1,
+        bark: skillTree.bark < 3 && rank === skillTree.bark + 1,
+        strongRoots: skillTree.strongRoots < 3 && rank === skillTree.strongRoots + 1,
+        heartwood: skillTree.heartwood < 3 && rank === skillTree.heartwood + 1
+    };
+
+    if (!Object.hasOwn(skillRequirements, skill) || !skillRequirements[skill] || game.skillPoints < 1) {
+        return false;
+    }
+
+    if (skill === "branch") {
+        skillTree.branchLeafMilestones.push(game.upgrades.leaf);
+    }
+
+    skillTree[skill] = rank;
+    game.skillPoints -= 1;
     saveGameState();
     return true;
 }

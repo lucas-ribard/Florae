@@ -36,6 +36,7 @@
                     <dt>Naturally grown roots</dt><dd id="plantStatsNaturalRoots">0</dd>
                     <dt>Natural stem height</dt><dd id="plantStatsStemHeight">0 units</dd>
                     <dt>Naturally grown leaves</dt><dd id="plantStatsNaturalLeaves">0</dd>
+                    <dt>Leaves from Leaf upgrade</dt><dd id="plantStatsUpgradeLeaves">0</dd>
                 </dl>
             </section>
             <section class="plant-stat-category" aria-labelledby="plantAbsorptionStatsHeading">
@@ -52,6 +53,9 @@
                     <dt>Roots upgrade</dt><dd>Lv. <span id="plantStatsRootUpgrade">0</span></dd>
                     <dt>Water action yield</dt><dd id="plantStatsWaterYield">+20 per action</dd>
                     <dt>Nutriment action yield</dt><dd id="plantStatsNutrimentYield">+20 per action</dd>
+                    <dt>Strong Roots skill</dt><dd>Lv. <span id="plantStatsStrongRoots">0</span></dd>
+                    <dt>Bark protection</dt><dd id="plantStatsBarkProtection">−0 Thunderstorm / −0 Heavy Rain</dd>
+                    <dt>Heartwood growth</dt><dd id="plantStatsHeartwoodGrowth">+0 per day</dd>
                     <dt>Vitality upgrade</dt><dd>Lv. <span id="plantStatsVitalityUpgrade">0</span></dd>
                     <dt>Healing bonus</dt><dd id="plantStatsHealingBonus">+0 per day</dd>
                 </dl>
@@ -60,8 +64,10 @@
                 <h4 id="plantAppearanceStatsHeading">Appearance</h4>
                 <dl class="plant-stats-list">
                     <dt>Stem thickness</dt><dd id="plantStatsStemWidth">Not yet grown</dd>
+                    <dt>Added branches</dt><dd id="plantStatsBranches">0</dd>
                     <dt>Total visible leaves</dt><dd id="plantStatsLeaves">0</dd>
                     <dt>Visible roots</dt><dd id="plantStatsRoots">0</dd>
+                    <dt>Flowers</dt><dd id="plantStatsFlowers">0</dd>
                 </dl>
             </section>
             <p>Roots appear during germination, the stem emerges at the sprout stage, and leaves begin at the seedling stage. Each natural leaf absorbs 1 sunlight per day. Stem measurements are visual units.</p>
@@ -164,48 +170,63 @@
 
         </div>
         
-        <section class="debug-section" aria-labelledby="debugHeading">
-            <div class="debug-header">
-                <h3 id="debugHeading">Debug tools</h3>
-                <span>Health factor: <strong id="HealthFactorValue">0</strong></span>
-            </div>
-
-            <div class="debug-group">
-                <h4>Growth points</h4>
-                <div class="debug-actions">
-                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="10">+10 points</button>
-                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="-10">-10 points</button>
+        <div class="debug-tools">
+            <button id="debugToggle" class="debug-toggle" type="button" aria-controls="debugPanel" aria-expanded="false">
+                <span>Debug tools</span>
+                <span id="debugToggleLabel">Show</span>
+            </button>
+            <section id="debugPanel" class="debug-section" aria-labelledby="debugHeading" hidden>
+                <div class="debug-header">
+                    <h3 id="debugHeading">Debug controls</h3>
+                    <span>Health factor: <strong id="HealthFactorValue">0</strong></span>
                 </div>
-            </div>
 
-            <div class="debug-group">
-                <h4>Plant growth</h4>
-                <div class="debug-actions">
-                    <button type="button" data-debug-stat="growth" data-debug-amount="25">+25 growth</button>
-                    <button type="button" data-debug-stat="growth" data-debug-amount="-25">-25 growth</button>
-                    <button type="button" data-debug-stat="health" data-debug-amount="25">+25 health</button>
-                    <button type="button" data-debug-stat="health" data-debug-amount="-25">-25 health</button>
+                <div class="debug-group">
+                    <h4>Growth points</h4>
+                    <div class="debug-actions">
+                        <button type="button" data-debug-stat="growthPoints" data-debug-amount="10">+10 points</button>
+                        <button type="button" data-debug-stat="growthPoints" data-debug-amount="-10">-10 points</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="debug-group">
-                <h4>Resources</h4>
-                <div class="debug-actions">
-                    <button id="waterButton" type="button">+ Water</button>
-                    <button id="waterButtonNegative" type="button">- Water</button>
-                    <button id="sunButton" type="button">+ Sunlight</button>
-                    <button id="sunButtonNegative" type="button">- Sunlight</button>
-                    <button id="nutrimentsButton" type="button">+ Nutriments</button>
-                    <button id="nutrimentsButtonNegative" type="button">- Nutriments</button>
+                <div class="debug-group">
+                    <h4>Skill points</h4>
+                    <div class="debug-actions">
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="1">+1 point</button>
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="5">+5 points</button>
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="-1">-1 point</button>
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="-5">-5 points</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="debug-actions debug-footer">
-                <button id="debugAdvanceDay" type="button">Advance one day</button>
-                <button id="resetButton" class="debug-reset" type="button">Reset game</button>
-            </div>
-        </section>
+                <div class="debug-group">
+                    <h4>Plant growth</h4>
+                    <div class="debug-actions">
+                        <button type="button" data-debug-stat="growth" data-debug-amount="25">+25 growth</button>
+                        <button type="button" data-debug-stat="growth" data-debug-amount="-25">-25 growth</button>
+                        <button type="button" data-debug-stat="health" data-debug-amount="25">+25 health</button>
+                        <button type="button" data-debug-stat="health" data-debug-amount="-25">-25 health</button>
+                    </div>
+                </div>
 
+                <div class="debug-group">
+                    <h4>Resources</h4>
+                    <div class="debug-actions">
+                        <button id="waterButton" type="button">+ Water</button>
+                        <button id="waterButtonNegative" type="button">- Water</button>
+                        <button id="sunButton" type="button">+ Sunlight</button>
+                        <button id="sunButtonNegative" type="button">- Sunlight</button>
+                        <button id="nutrimentsButton" type="button">+ Nutriments</button>
+                        <button id="nutrimentsButtonNegative" type="button">- Nutriments</button>
+                    </div>
+                </div>
+
+                <div class="debug-actions debug-footer">
+                    <button id="debugAdvanceDay" type="button">Advance one day</button>
+                    <button id="resetButton" class="debug-reset" type="button">Reset game</button>
+                </div>
+            </section>
+        </div>
 
         <div id="message">
             Take care of your plant!
@@ -261,17 +282,86 @@
             <button class="panel-close" type="button" data-close-panel aria-label="Close skill tree">x</button>
         </div>
         <div class="panel-content">
-            <div class="skill-branch">
-                <div class="skill-node skill-node-active">🌱</div>
-                <div class="skill-line"></div>
-                <div class="skill-node">✦</div>
-                <div class="skill-line"></div>
-                <div class="skill-node skill-node-locked">?</div>
-            </div>
-            <h3>Your plant's path</h3>
-            <p>Skill points are earned every three plant stage changes. Points stay available until skill-tree abilities can be unlocked.</p>
+            <p>Spend skill points on plant specialities. Earn 1 point every 3 growth-stage changes.</p>
             <p class="skill-point-balance">Available skill points: <strong id="skillPointsValue">0</strong></p>
             <p class="skill-point-progress"><span id="remainingStageChangesValue">3</span> stage changes until the next point.</p>
+
+            <section class="skill-speciality" aria-labelledby="branchSpecialityHeading">
+                <h3 id="branchSpecialityHeading">Branch</h3>
+                <p>Each node adds a side branch. Every Leaf upgrade bought after a Branch node adds one extra leaf per Branch node; existing upgrades are unchanged.</p>
+                <div class="skill-node-row" aria-label="Branch speciality ranks">
+                    <button class="skill-node" type="button" data-skill="branch" data-skill-rank="1" data-skill-label="Branch I">1</button>
+                    <button class="skill-node" type="button" data-skill="branch" data-skill-rank="2" data-skill-label="Branch II">2</button>
+                    <button class="skill-node" type="button" data-skill="branch" data-skill-rank="3" data-skill-label="Branch III">3</button>
+                    <button class="skill-node" type="button" data-skill="branch" data-skill-rank="4" data-skill-label="Branch IV">4</button>
+                    <button class="skill-node" type="button" data-skill="branch" data-skill-rank="5" data-skill-label="Branch V">5</button>
+                </div>
+                <p class="skill-branch-effect">Leaves from next Leaf upgrade: <span id="branchLeafMultiplier">1 leaf</span></p>
+            </section>
+
+            <section class="skill-speciality" aria-labelledby="flowerSpecialityHeading">
+                <h3 id="flowerSpecialityHeading">Flower</h3>
+                <p>Unlock a flower at the end of the main stem. This speciality is visual only.</p>
+                <button class="skill-purchase" type="button" data-skill="flower" data-skill-rank="1" data-skill-label="Stem Flower">
+                    <span class="skill-purchase-icon">✿</span>
+                    <span><strong>Stem flower</strong><small>1 skill point · Grow a flower at the stem tip</small></span>
+                    <span class="skill-purchase-state">Unlock</span>
+                </button>
+
+                <div class="skill-subbranches">
+                    <div class="skill-subbranch">
+                        <h4>Branch blooms</h4>
+                        <p>Requires Flower and at least one Branch node.</p>
+                        <button class="skill-purchase" type="button" data-skill="branchFlower" data-skill-rank="1" data-skill-label="Branch Blooms">
+                            <span class="skill-purchase-icon">✿</span>
+                            <span><strong>Branch blooms</strong><small>1 skill point · Add flowers to side-branch tips</small></span>
+                            <span class="skill-purchase-state">Unlock</span>
+                        </button>
+                    </div>
+                    <div class="skill-subbranch">
+                        <h4>Flower appearance</h4>
+                        <p>Requires Flower. Each node changes the flower's color and petal pattern.</p>
+                        <div class="skill-node-row" aria-label="Flower appearance ranks">
+                            <button class="skill-node" type="button" data-skill="flowerStyle" data-skill-rank="1" data-skill-label="Flower style I">1</button>
+                            <button class="skill-node" type="button" data-skill="flowerStyle" data-skill-rank="2" data-skill-label="Flower style II">2</button>
+                            <button class="skill-node" type="button" data-skill="flowerStyle" data-skill-rank="3" data-skill-label="Flower style III">3</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        <section class="skill-speciality" aria-labelledby="stemSpecialityHeading">
+            <h3 id="stemSpecialityHeading">Stem</h3>
+            <p>Develop protective bark, stronger roots, and sturdy heartwood. Each rank costs 1 skill point.</p>
+            <div class="skill-subbranches">
+                <div class="skill-subbranch">
+                    <h4>Bark</h4>
+                    <p>Thickens the stem, reduces Thunderstorm damage by 2 per rank, and Heavy Rain damage by 1.</p>
+                    <div class="skill-node-row" aria-label="Bark ranks">
+                        <button class="skill-node" type="button" data-skill="bark" data-skill-rank="1" data-skill-label="Bark I">1</button>
+                        <button class="skill-node" type="button" data-skill="bark" data-skill-rank="2" data-skill-label="Bark II">2</button>
+                        <button class="skill-node" type="button" data-skill="bark" data-skill-rank="3" data-skill-label="Bark III">3</button>
+                    </div>
+                </div>
+                <div class="skill-subbranch">
+                    <h4>Strong Roots</h4>
+                    <p>Adds 2 water and nutriment per action per rank, boosts nutrients from passing bugs, and grows extra visible roots.</p>
+                    <div class="skill-node-row" aria-label="Strong Roots ranks">
+                        <button class="skill-node" type="button" data-skill="strongRoots" data-skill-rank="1" data-skill-label="Strong Roots I">1</button>
+                        <button class="skill-node" type="button" data-skill="strongRoots" data-skill-rank="2" data-skill-label="Strong Roots II">2</button>
+                        <button class="skill-node" type="button" data-skill="strongRoots" data-skill-rank="3" data-skill-label="Strong Roots III">3</button>
+                    </div>
+                </div>
+                <div class="skill-subbranch">
+                    <h4>Heartwood</h4>
+                    <p>Adds 1 growth per day per rank while resources are healthy.</p>
+                    <div class="skill-node-row" aria-label="Heartwood ranks">
+                        <button class="skill-node" type="button" data-skill="heartwood" data-skill-rank="1" data-skill-label="Heartwood I">1</button>
+                        <button class="skill-node" type="button" data-skill="heartwood" data-skill-rank="2" data-skill-label="Heartwood II">2</button>
+                        <button class="skill-node" type="button" data-skill="heartwood" data-skill-rank="3" data-skill-label="Heartwood III">3</button>
+                    </div>
+                </div>
+            </div>
+        </section>
         </div>
     </aside>
     </body>

@@ -27,6 +27,16 @@ export const game = {
     season: "Spring",
     skillPoints: 0,
     stageChangeRemainder: 0,
+    skillTree: {
+        branch: 0,
+        branchLeafMilestones: [],
+        flower: 0,
+        branchFlower: 0,
+        flowerStyle: 0,
+        bark: 0,
+        strongRoots: 0,
+        heartwood: 0
+    },
     upgrades: {
         roots: 0,
         leaf: 0,
