@@ -137,7 +137,9 @@ export function createPlantSvg(plant, upgrades) {
         const stemX = Math.round(180 + stemBend * (1 - (y - top) / stemHeight));
         return createLeaf(stemX, y, index % 2 === 0 ? -1 : 1);
     }).join("");
-    const leafLanes = [{ type: "stem" }, ...branchPositions.map(branch => ({ type: "branch", ...branch }))];
+    const leafLanes = branchPositions.length > 0
+        ? branchPositions.map(branch => ({ type: "branch", ...branch }))
+        : [{ type: "stem" }];
     const upgradeLeaves = Array.from({ length: leafUpgradeLeaves }, (_, index) => {
         const laneIndex = index % leafLanes.length;
         const laneRank = Math.floor(index / leafLanes.length);
@@ -148,7 +150,7 @@ export function createPlantSvg(plant, upgrades) {
         let side;
 
         if (host.type === "branch") {
-            const progress = 0.25 + 0.5 * ((laneRank + 1) / (laneCount + 1));
+            const progress = 0.45 + 0.45 * ((laneRank + 1) / (laneCount + 1));
             x = Math.round(host.stemX + (host.x - host.stemX) * progress);
             y = Math.round(host.stemY + (host.y - host.stemY) * progress);
             side = host.side;
