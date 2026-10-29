@@ -2,8 +2,14 @@ function clamp(value) {
     return Math.min(100, Math.max(0, value));
 }
 
+export function getNaturalLeafCount(level) {
+    const plantLevel = Number.isFinite(Number(level)) ? Math.max(1, Math.floor(Number(level))) : 1;
+    return 1 + Math.min(Math.floor((plantLevel - 1) / 2), 3);
+}
+
 export function updatePlant(plant, weather, upgrades) {
     plant.nutriments -= 1;
+    plant.sunlight += getNaturalLeafCount(plant.level);
 
     switch (weather.type) {
         case "ThunderStorm": plant.water += 15; plant.sunlight -= 10; plant.health -= 10; break;

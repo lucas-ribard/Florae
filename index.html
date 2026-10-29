@@ -23,6 +23,46 @@
             <div id="plant" aria-label="Your plant"></div>
         </div>
 
+        <button id="plantStatsToggle" class="plant-stats-toggle" type="button" aria-controls="plantStatsPanel" aria-expanded="false">
+            Show plant stats
+        </button>
+        <section id="plantStatsPanel" class="plant-stats-panel" aria-label="Plant stats" hidden>
+            <h3>Plant abilities</h3>
+            <section class="plant-stat-category" aria-labelledby="plantGrowthStatsHeading">
+                <h4 id="plantGrowthStatsHeading">Growth</h4>
+                <dl class="plant-stats-list">
+                    <dt>Plant level</dt><dd id="plantStatsLevel">1</dd>
+                    <dt>Naturally grown leaves</dt><dd id="plantStatsNaturalLeaves">1</dd>
+                </dl>
+            </section>
+            <section class="plant-stat-category" aria-labelledby="plantAbsorptionStatsHeading">
+                <h4 id="plantAbsorptionStatsHeading">Resource absorption</h4>
+                <dl class="plant-stats-list">
+                    <dt>Sunlight from natural leaves</dt><dd id="plantStatsLeafAbsorption">+1 per day</dd>
+                </dl>
+            </section>
+            <section class="plant-stat-category" aria-labelledby="plantUpgradeStatsHeading">
+                <h4 id="plantUpgradeStatsHeading">Upgrades &amp; action yields</h4>
+                <dl class="plant-stats-list">
+                    <dt>Leaf upgrade</dt><dd>Lv. <span id="plantStatsLeafUpgrade">0</span></dd>
+                    <dt>Sunlight action yield</dt><dd id="plantStatsSunlightYield">+20 per action</dd>
+                    <dt>Roots upgrade</dt><dd>Lv. <span id="plantStatsRootUpgrade">0</span></dd>
+                    <dt>Water action yield</dt><dd id="plantStatsWaterYield">+20 per action</dd>
+                    <dt>Nutriment action yield</dt><dd id="plantStatsNutrimentYield">+20 per action</dd>
+                    <dt>Vitality upgrade</dt><dd>Lv. <span id="plantStatsVitalityUpgrade">0</span></dd>
+                    <dt>Healing bonus</dt><dd id="plantStatsHealingBonus">+0 per day</dd>
+                </dl>
+            </section>
+            <section class="plant-stat-category" aria-labelledby="plantAppearanceStatsHeading">
+                <h4 id="plantAppearanceStatsHeading">Appearance</h4>
+                <dl class="plant-stats-list">
+                    <dt>Total visible leaves</dt><dd id="plantStatsLeaves">1</dd>
+                    <dt>Visible roots</dt><dd id="plantStatsRoots">3</dd>
+                </dl>
+            </section>
+            <p>Each naturally grown leaf absorbs 1 sunlight per day. Natural leaves increase every two plant levels up to four leaves; Leaf upgrades also increase sunlight gained per action.</p>
+        </section>
+
         <!-- Stage -->
         <p>
             Stage:
@@ -120,46 +160,47 @@
 
         </div>
         
-        <br><br>
-        <h3>Debug</h3>
-        <p>
-            Health Factor:
-            <span id="HealthFactorValue">0</span>
-        </p>
-       
-        <div class="actions">
+        <section class="debug-section" aria-labelledby="debugHeading">
+            <div class="debug-header">
+                <h3 id="debugHeading">Debug tools</h3>
+                <span>Health factor: <strong id="HealthFactorValue">0</strong></span>
+            </div>
 
-            <button id="waterButton">
-                + Water
-            </button>
+            <div class="debug-group">
+                <h4>Growth points</h4>
+                <div class="debug-actions">
+                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="10">+10 points</button>
+                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="-10">-10 points</button>
+                </div>
+            </div>
 
-            <button id="sunButton">
-                + Sunlight
-            </button>
+            <div class="debug-group">
+                <h4>Plant growth</h4>
+                <div class="debug-actions">
+                    <button type="button" data-debug-stat="growth" data-debug-amount="25">+25 growth</button>
+                    <button type="button" data-debug-stat="growth" data-debug-amount="-25">-25 growth</button>
+                    <button type="button" data-debug-stat="health" data-debug-amount="25">+25 health</button>
+                    <button type="button" data-debug-stat="health" data-debug-amount="-25">-25 health</button>
+                </div>
+            </div>
 
-            <button id="nutrimentsButton">
-                + Nutriments
-            </button>
+            <div class="debug-group">
+                <h4>Resources</h4>
+                <div class="debug-actions">
+                    <button id="waterButton" type="button">+ Water</button>
+                    <button id="waterButtonNegative" type="button">- Water</button>
+                    <button id="sunButton" type="button">+ Sunlight</button>
+                    <button id="sunButtonNegative" type="button">- Sunlight</button>
+                    <button id="nutrimentsButton" type="button">+ Nutriments</button>
+                    <button id="nutrimentsButtonNegative" type="button">- Nutriments</button>
+                </div>
+            </div>
 
-        
-        </div>
-        <br>
-        <div class="action"> 
-            <button id="waterButtonNegative">
-                - water                
-            </button>
-            <button id="sunButtonNegative">
-                - Sunlight
-            </button>
-
-            <button id="nutrimentsButtonNegative">
-                - Nutriments
-            </button>
-        </div>
-        <br>
-        <button id="resetButton" type="button" style="background-color: rgb(104, 0, 0); color: white;">
-            Reset
-        </button>
+            <div class="debug-actions debug-footer">
+                <button id="debugAdvanceDay" type="button">Advance one day</button>
+                <button id="resetButton" class="debug-reset" type="button">Reset game</button>
+            </div>
+        </section>
 
 
         <div id="message">

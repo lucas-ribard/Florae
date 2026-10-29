@@ -286,6 +286,70 @@
             stroke-linecap: round;
         }
 
+        .plant-stats-toggle {
+            width: 100%;
+            margin: -8px 0 18px;
+            padding: 9px 12px;
+            background: #294b32;
+            font-size: 13px;
+        }
+
+        .plant-stats-toggle[aria-expanded="true"] {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .plant-stats-panel {
+            margin: -18px 0 20px;
+            padding: 14px;
+            background: #142a1b;
+            border: 1px solid #315c3c;
+            border-radius: 0 0 10px 10px;
+            color: #c5dfc7;
+            text-align: left;
+        }
+
+        .plant-stats-panel h3 {
+            margin: 0 0 10px;
+            color: white;
+            font-size: 15px;
+        }
+
+        .plant-stat-category {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #315c3c;
+        }
+
+        .plant-stat-category h4 {
+            margin: 0 0 8px;
+            color: #8ee695;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .plant-stats-list {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 6px 12px;
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .plant-stats-list dd {
+            margin: 0;
+            color: #8ee695;
+            text-align: right;
+        }
+
+        .plant-stats-panel p {
+            margin: 12px 0 0;
+            color: #a9c5ad;
+            font-size: 11px;
+            font-weight: normal;
+            line-height: 1.45;
+        }
+
         /* Stats */
 
         .stats {
@@ -348,6 +412,70 @@
         .actions {
             display: flex;
             gap: 10px;
+        }
+
+        .debug-section {
+            margin-top: 24px;
+            padding: 16px;
+            background: #142a1b;
+            border: 1px solid #315c3c;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .debug-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #315c3c;
+            color: #a9c5ad;
+            font-size: 12px;
+        }
+
+        .debug-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 16px;
+        }
+
+        .debug-header strong {
+            color: #8ee695;
+        }
+
+        .debug-group {
+            margin-top: 14px;
+        }
+
+        .debug-group h4 {
+            margin: 0 0 8px;
+            color: #c5dfc7;
+            font-size: 12px;
+        }
+
+        .debug-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .debug-actions button {
+            min-width: 0;
+            padding: 9px 6px;
+            font-size: 12px;
+        }
+
+        .debug-footer {
+            margin-top: 14px;
+        }
+
+        .debug-actions .debug-reset {
+            background: #680000;
+        }
+
+        .debug-actions .debug-reset:hover {
+            background: #8b1616;
         }
 
         button {

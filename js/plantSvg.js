@@ -1,3 +1,5 @@
+import { getNaturalLeafCount } from "./plant.js";
+
 function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, value));
 }
@@ -18,12 +20,26 @@ function createRandom(seed) {
     };
 }
 
-export function createPlantSvg(plant, upgrades) {
-    const random = createRandom(plant.visualSeed);
+export function getPlantVisualStats(plant, upgrades) {
     const level = getLevel(plant.level);
     const rootLevel = getLevel(upgrades.roots);
     const leafLevel = getLevel(upgrades.leaf);
     const vitalityLevel = getLevel(upgrades.vitality);
+
+    return {
+        level,
+        rootLevel,
+        leafLevel,
+        vitalityLevel,
+        rootCount: 3 + Math.min(rootLevel, 7) * 2,
+        naturalLeafCount: getNaturalLeafCount(level),
+        leafCount: getNaturalLeafCount(level) + Math.min(leafLevel, 6)
+    };
+}
+
+export function createPlantSvg(plant, upgrades) {
+    const random = createRandom(plant.visualSeed);
+    const { level, rootLevel, leafLevel, vitalityLevel, rootCount, leafCount } = getPlantVisualStats(plant, upgrades);
     const top = clamp(112 - Math.max(0, level - 1) * 7, 48, 112);
     const stemWidth = clamp(5 + vitalityLevel * 0.8 + Math.max(0, level - 1) * 0.25, 5, 13);
     const hue = Math.round(112 + random() * 34);
@@ -31,8 +47,6 @@ export function createPlantSvg(plant, upgrades) {
     const leafHighlight = `hsl(${hue} 54% 58%)`;
     const stemColor = `hsl(${Math.max(85, hue - 20)} 42% 34%)`;
     const stemBend = Math.round((random() - 0.5) * 28);
-    const rootCount = 3 + Math.min(rootLevel, 7) * 2;
-    const leafPairCount = 1 + Math.min(leafLevel, 6) + Math.min(Math.floor(Math.max(0, level - 1) / 2), 3);
     const stem = `M 180 211 C ${174 + stemBend} 174, ${188 - stemBend} 137, ${180 + stemBend} ${top}`;
     const roots = Array.from({ length: rootCount }, (_, index) => {
         const side = index % 2 === 0 ? -1 : 1;
@@ -42,8 +56,8 @@ export function createPlantSvg(plant, upgrades) {
         const controlX = 180 + side * (rank * 5 + random() * 10);
         return `<path d="M 180 207 C ${controlX} 222, ${endX - side * 4} ${endY - 5}, ${endX} ${endY}" />`;
     }).join("");
-    const leaves = Array.from({ length: leafPairCount }, (_, index) => {
-        const progress = (index + 0.8) / (leafPairCount + 0.3);
+    const leaves = Array.from({ length: leafCount }, (_, index) => {
+        const progress = (index + 0.8) / (leafCount + 0.3);
         const y = Math.round(196 - progress * (196 - top));
         const stemX = Math.round(180 + stemBend * (1 - (y - top) / (211 - top)));
         const side = index % 2 === 0 ? -1 : 1;

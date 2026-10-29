@@ -1,8 +1,8 @@
 // main.js
 
-import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade } from "./gameData.js";
+import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade, adjustDebugValue, advanceGameDay } from "./gameData.js";
 import { startGameClock } from "./gameClock.js";
-import { createPlantSvg } from "./plantSvg.js";
+import { createPlantSvg, getPlantVisualStats } from "./plantSvg.js";
 
 
 const plantVisual = document.getElementById("plant");
@@ -21,6 +21,10 @@ const panelBackdrop = document.getElementById("panelBackdrop");
 const sidePanels = document.querySelectorAll(".side-panel");
 const closePanelButtons = document.querySelectorAll("[data-close-panel]");
 const upgradeBuyButtons = document.querySelectorAll("[data-upgrade]");
+const debugValueButtons = document.querySelectorAll("[data-debug-stat]");
+const advanceDayButton = document.getElementById("debugAdvanceDay");
+const plantStatsToggle = document.getElementById("plantStatsToggle");
+const plantStatsPanel = document.getElementById("plantStatsPanel");
 
 const growthPointsValue = document.getElementById("growthPoints");
 
@@ -41,6 +45,11 @@ const seasonValue = document.getElementById("seasonValue");
 const bugsTypeValue = document.getElementById("bugsTypeValue");
 const bugsValue = document.getElementById("bugsValue");
 
+plantStatsToggle.addEventListener("click", () => {
+    const isExpanded = plantStatsToggle.getAttribute("aria-expanded") === "true";
+    plantStatsToggle.setAttribute("aria-expanded", String(!isExpanded));
+    plantStatsPanel.hidden = isExpanded;
+});
 
 waterButton.addEventListener("click", () => {
 
@@ -140,9 +149,35 @@ upgradeBuyButtons.forEach((button) => {
     });
 });
 
+debugValueButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        adjustDebugValue(button.dataset.debugStat, Number(button.dataset.debugAmount));
+        updateUI();
+    });
+});
+
+advanceDayButton.addEventListener("click", () => {
+    advanceGameDay();
+    updateUI();
+});
+
 
 export function updateUI() {
     plantVisual.innerHTML = createPlantSvg(plant, game.upgrades);
+    const visualStats = getPlantVisualStats(plant, game.upgrades);
+
+    document.getElementById("plantStatsLevel").textContent = plant.level;
+    document.getElementById("plantStatsLeafUpgrade").textContent = game.upgrades.leaf;
+    document.getElementById("plantStatsSunlightYield").textContent = `+${20 + game.upgrades.leaf} per action`;
+    document.getElementById("plantStatsLeafAbsorption").textContent = `+${visualStats.naturalLeafCount} per day`;
+    document.getElementById("plantStatsRootUpgrade").textContent = game.upgrades.roots;
+    document.getElementById("plantStatsWaterYield").textContent = `+${20 + game.upgrades.roots} per action`;
+    document.getElementById("plantStatsNutrimentYield").textContent = `+${20 + game.upgrades.roots} per action`;
+    document.getElementById("plantStatsVitalityUpgrade").textContent = game.upgrades.vitality;
+    document.getElementById("plantStatsHealingBonus").textContent = `+${game.upgrades.vitality} per day`;
+    document.getElementById("plantStatsNaturalLeaves").textContent = visualStats.naturalLeafCount;
+    document.getElementById("plantStatsLeaves").textContent = visualStats.leafCount;
+    document.getElementById("plantStatsRoots").textContent = visualStats.rootCount;
 
     // states values
     waterValue.textContent = plant.water;

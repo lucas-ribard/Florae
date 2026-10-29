@@ -67,6 +67,38 @@ export function updatePlant() {
     updatePlantState(plant, weather, game.upgrades);
 }
 
+export function adjustDebugValue(stat, amount) {
+    if (!Number.isFinite(amount)) {
+        return false;
+    }
+
+    switch (stat) {
+        case "growthPoints":
+            plant.growthPoints = Math.max(0, plant.growthPoints + amount);
+            break;
+        case "growth":
+            plant.growth += amount;
+            while (plant.growth >= 100) {
+                plant.growth -= 100;
+                plant.level += 1;
+                plant.growthPoints += 1;
+            }
+            plant.growth = Math.max(0, plant.growth);
+            break;
+        case "health":
+        case "water":
+        case "sunlight":
+        case "nutriments":
+            plant[stat] = Math.min(100, Math.max(0, plant[stat] + amount));
+            break;
+        default:
+            return false;
+    }
+
+    saveGameState();
+    return true;
+}
+
 export function getUpgradeCost(upgrade) {
     return 1 + game.upgrades[upgrade] * 2;
 }
@@ -83,4 +115,3 @@ export function purchaseUpgrade(upgrade) {
     saveGameState();
     return true;
 }
-
