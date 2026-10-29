@@ -1,6 +1,10 @@
 # Florae
-a plant game
+A plant game made in my free time
 
+## Grow and Evolve your plant
+### V0.1 basic system starting to appear, but not finished
+
+## current state
 The plant is drawn as a procedural SVG. Root, leaf, and vitality upgrades change
 its shape, while each saved plant keeps a distinct appearance across sessions.
 
@@ -10,5 +14,3 @@ plus Flower specialities for stem blooms, branch blooms, and flower appearance.
 The Stem speciality offers bark that reduces storm damage, stronger roots that
 improve water and nutriment gains, and heartwood that boosts healthy daily growth.
 
-## Grow and Evolve your plant
-### V0.1 basic system starting to appear, but not finished
