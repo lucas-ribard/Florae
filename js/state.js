@@ -7,7 +7,8 @@ export const plant = {
     growth: 0,
     stage: 'seed',
     level: 1,
-    growthPoints: 1
+    growthPoints: 1,
+    visualSeed: Math.floor(Math.random() * 0xFFFFFFFF)
 };
 
 export const weather = {
@@ -23,5 +24,12 @@ export const bugs = {
 
 export const game = {
     day: 1,
-    season: "Spring"
+    season: "Spring",
+    skillPoints: 0,
+    stageChangeRemainder: 0,
+    upgrades: {
+        roots: 0,
+        leaf: 0,
+        vitality: 0
+    }
 };

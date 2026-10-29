@@ -20,13 +20,57 @@
 
         <!-- Plant -->
         <div class="plant-area">
-            <div id="plant">🌱</div>
+            <div id="plant" aria-label="Your plant"></div>
         </div>
+
+        <button id="plantStatsToggle" class="plant-stats-toggle" type="button" aria-controls="plantStatsPanel" aria-expanded="false">
+            Show plant stats
+        </button>
+        <section id="plantStatsPanel" class="plant-stats-panel" aria-label="Plant stats" hidden>
+            <h3>Plant abilities</h3>
+            <section class="plant-stat-category" aria-labelledby="plantGrowthStatsHeading">
+                <h4 id="plantGrowthStatsHeading">Growth</h4>
+                <dl class="plant-stats-list">
+                    <dt>Plant level</dt><dd id="plantStatsLevel">1</dd>
+                    <dt>Growth stage</dt><dd id="plantStatsGrowthStage">Seed</dd>
+                    <dt>Naturally grown roots</dt><dd id="plantStatsNaturalRoots">0</dd>
+                    <dt>Natural stem height</dt><dd id="plantStatsStemHeight">0 units</dd>
+                    <dt>Naturally grown leaves</dt><dd id="plantStatsNaturalLeaves">0</dd>
+                </dl>
+            </section>
+            <section class="plant-stat-category" aria-labelledby="plantAbsorptionStatsHeading">
+                <h4 id="plantAbsorptionStatsHeading">Resource absorption</h4>
+                <dl class="plant-stats-list">
+                    <dt>Sunlight from natural leaves</dt><dd id="plantStatsLeafAbsorption">+0 per day</dd>
+                </dl>
+            </section>
+            <section class="plant-stat-category" aria-labelledby="plantUpgradeStatsHeading">
+                <h4 id="plantUpgradeStatsHeading">Upgrades &amp; action yields</h4>
+                <dl class="plant-stats-list">
+                    <dt>Leaf upgrade</dt><dd>Lv. <span id="plantStatsLeafUpgrade">0</span></dd>
+                    <dt>Sunlight action yield</dt><dd id="plantStatsSunlightYield">+20 per action</dd>
+                    <dt>Roots upgrade</dt><dd>Lv. <span id="plantStatsRootUpgrade">0</span></dd>
+                    <dt>Water action yield</dt><dd id="plantStatsWaterYield">+20 per action</dd>
+                    <dt>Nutriment action yield</dt><dd id="plantStatsNutrimentYield">+20 per action</dd>
+                    <dt>Vitality upgrade</dt><dd>Lv. <span id="plantStatsVitalityUpgrade">0</span></dd>
+                    <dt>Healing bonus</dt><dd id="plantStatsHealingBonus">+0 per day</dd>
+                </dl>
+            </section>
+            <section class="plant-stat-category" aria-labelledby="plantAppearanceStatsHeading">
+                <h4 id="plantAppearanceStatsHeading">Appearance</h4>
+                <dl class="plant-stats-list">
+                    <dt>Stem thickness</dt><dd id="plantStatsStemWidth">Not yet grown</dd>
+                    <dt>Total visible leaves</dt><dd id="plantStatsLeaves">0</dd>
+                    <dt>Visible roots</dt><dd id="plantStatsRoots">0</dd>
+                </dl>
+            </section>
+            <p>Roots appear during germination, the stem emerges at the sprout stage, and leaves begin at the seedling stage. Each natural leaf absorbs 1 sunlight per day. Stem measurements are visual units.</p>
+        </section>
 
         <!-- Stage -->
         <p>
             Stage:
-            <span id="stageValue">seed</span> - <span id="levelValue">1</span>
+            <span id="stageValue">Seed</span> - <span id="levelValue">1</span>
         </p>
         <p>
             Growth Points:
@@ -119,46 +163,48 @@
             </div>
 
         </div>
-
-        <h3>Debug Actions</h3>
-        <p>
-            Health Factor:
-            <span id="HealthFactorValue">0</span>
-        </p>
-       
-        <div class="actions">
-
-            <button id="waterButton">
-                + Water
-            </button>
-
-            <button id="sunButton">
-                + Sunlight
-            </button>
-
-            <button id="nutrimentsButton">
-                + Nutriments
-            </button>
-
         
-        </div>
-        <br>
-        <div class="action"> 
-            <button id="waterButtonNegative">
-                - water                
-            </button>
-            <button id="sunButtonNegative">
-                - Sunlight
-            </button>
+        <section class="debug-section" aria-labelledby="debugHeading">
+            <div class="debug-header">
+                <h3 id="debugHeading">Debug tools</h3>
+                <span>Health factor: <strong id="HealthFactorValue">0</strong></span>
+            </div>
 
-            <button id="nutrimentsButtonNegative">
-                - Nutriments
-            </button>
-        </div>
-        <br>
-        <button id="resetButton" type="button" style="background-color: rgb(104, 0, 0); color: white;">
-            Reset
-        </button>
+            <div class="debug-group">
+                <h4>Growth points</h4>
+                <div class="debug-actions">
+                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="10">+10 points</button>
+                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="-10">-10 points</button>
+                </div>
+            </div>
+
+            <div class="debug-group">
+                <h4>Plant growth</h4>
+                <div class="debug-actions">
+                    <button type="button" data-debug-stat="growth" data-debug-amount="25">+25 growth</button>
+                    <button type="button" data-debug-stat="growth" data-debug-amount="-25">-25 growth</button>
+                    <button type="button" data-debug-stat="health" data-debug-amount="25">+25 health</button>
+                    <button type="button" data-debug-stat="health" data-debug-amount="-25">-25 health</button>
+                </div>
+            </div>
+
+            <div class="debug-group">
+                <h4>Resources</h4>
+                <div class="debug-actions">
+                    <button id="waterButton" type="button">+ Water</button>
+                    <button id="waterButtonNegative" type="button">- Water</button>
+                    <button id="sunButton" type="button">+ Sunlight</button>
+                    <button id="sunButtonNegative" type="button">- Sunlight</button>
+                    <button id="nutrimentsButton" type="button">+ Nutriments</button>
+                    <button id="nutrimentsButtonNegative" type="button">- Nutriments</button>
+                </div>
+            </div>
+
+            <div class="debug-actions debug-footer">
+                <button id="debugAdvanceDay" type="button">Advance one day</button>
+                <button id="resetButton" class="debug-reset" type="button">Reset game</button>
+            </div>
+        </section>
 
 
         <div id="message">
@@ -167,6 +213,66 @@
 
     </div>
 
-</body>
+    <button id="upgradeButton" class="side-tab side-tab-left" type="button" aria-controls="upgradePanel" aria-expanded="false">
+        <span aria-hidden="true">✦</span>
+        <span>Upgrades</span>
+    </button>
 
+    <button id="skillTreeButton" class="side-tab side-tab-left side-tab-skill" type="button" aria-controls="skillTreePanel" aria-expanded="false">
+        <span aria-hidden="true">✦</span>
+        <span>Skill tree</span>
+    </button>
+
+    <div id="panelBackdrop" class="panel-backdrop" hidden></div>
+
+    <aside id="upgradePanel" class="side-panel side-panel-left" aria-hidden="true">
+        <div class="panel-header">
+            <div>
+                <p class="panel-kicker">Plant development</p>
+                <h2>Upgrades</h2>
+            </div>
+            <button class="panel-close" type="button" data-close-panel aria-label="Close upgrades">x</button>
+        </div>
+        <div class="panel-content">
+            <p>Spend growth points to strengthen and shape your plant.</p>
+            <div class="upgrade-list">
+                <div class="upgrade-card">
+                    <div><h3>Roots <span class="upgrade-level">Lv. <span data-upgrade-level="roots">0</span></span></h3><p>+1 water and nutriment gain, with deeper roots per level</p></div>
+                    <button class="upgrade-buy" data-upgrade="roots" type="button">Buy <span data-upgrade-cost="roots">1</span></button>
+                </div>
+                <div class="upgrade-card">
+                    <div><h3>Leaf <span class="upgrade-level">Lv. <span data-upgrade-level="leaf">0</span></span></h3><p>+1 sunlight gain and more leaves per level</p></div>
+                    <button class="upgrade-buy" data-upgrade="leaf" type="button">Buy <span data-upgrade-cost="leaf">1</span></button>
+                </div>
+                <div class="upgrade-card">
+                    <div><h3>Vitality <span class="upgrade-level">Lv. <span data-upgrade-level="vitality">0</span></span></h3><p>+1 healing and a sturdier stem</p></div>
+                    <button class="upgrade-buy" data-upgrade="vitality" type="button">Buy <span data-upgrade-cost="vitality">1</span></button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <aside id="skillTreePanel" class="side-panel side-panel-left" aria-hidden="true">
+        <div class="panel-header">
+            <div>
+                <p class="panel-kicker">Long-term growth</p>
+                <h2>Skill tree</h2>
+            </div>
+            <button class="panel-close" type="button" data-close-panel aria-label="Close skill tree">x</button>
+        </div>
+        <div class="panel-content">
+            <div class="skill-branch">
+                <div class="skill-node skill-node-active">🌱</div>
+                <div class="skill-line"></div>
+                <div class="skill-node">✦</div>
+                <div class="skill-line"></div>
+                <div class="skill-node skill-node-locked">?</div>
+            </div>
+            <h3>Your plant's path</h3>
+            <p>Skill points are earned every three plant stage changes. Points stay available until skill-tree abilities can be unlocked.</p>
+            <p class="skill-point-balance">Available skill points: <strong id="skillPointsValue">0</strong></p>
+            <p class="skill-point-progress"><span id="remainingStageChangesValue">3</span> stage changes until the next point.</p>
+        </div>
+    </aside>
+    </body>
 </html>
