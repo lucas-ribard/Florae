@@ -32,13 +32,16 @@
                 <h4 id="plantGrowthStatsHeading">Growth</h4>
                 <dl class="plant-stats-list">
                     <dt>Plant level</dt><dd id="plantStatsLevel">1</dd>
-                    <dt>Naturally grown leaves</dt><dd id="plantStatsNaturalLeaves">1</dd>
+                    <dt>Growth stage</dt><dd id="plantStatsGrowthStage">Seed</dd>
+                    <dt>Naturally grown roots</dt><dd id="plantStatsNaturalRoots">0</dd>
+                    <dt>Natural stem height</dt><dd id="plantStatsStemHeight">0 units</dd>
+                    <dt>Naturally grown leaves</dt><dd id="plantStatsNaturalLeaves">0</dd>
                 </dl>
             </section>
             <section class="plant-stat-category" aria-labelledby="plantAbsorptionStatsHeading">
                 <h4 id="plantAbsorptionStatsHeading">Resource absorption</h4>
                 <dl class="plant-stats-list">
-                    <dt>Sunlight from natural leaves</dt><dd id="plantStatsLeafAbsorption">+1 per day</dd>
+                    <dt>Sunlight from natural leaves</dt><dd id="plantStatsLeafAbsorption">+0 per day</dd>
                 </dl>
             </section>
             <section class="plant-stat-category" aria-labelledby="plantUpgradeStatsHeading">
@@ -56,17 +59,18 @@
             <section class="plant-stat-category" aria-labelledby="plantAppearanceStatsHeading">
                 <h4 id="plantAppearanceStatsHeading">Appearance</h4>
                 <dl class="plant-stats-list">
-                    <dt>Total visible leaves</dt><dd id="plantStatsLeaves">1</dd>
-                    <dt>Visible roots</dt><dd id="plantStatsRoots">3</dd>
+                    <dt>Stem thickness</dt><dd id="plantStatsStemWidth">Not yet grown</dd>
+                    <dt>Total visible leaves</dt><dd id="plantStatsLeaves">0</dd>
+                    <dt>Visible roots</dt><dd id="plantStatsRoots">0</dd>
                 </dl>
             </section>
-            <p>Each naturally grown leaf absorbs 1 sunlight per day. Natural leaves increase every two plant levels up to four leaves; Leaf upgrades also increase sunlight gained per action.</p>
+            <p>Roots appear during germination, the stem emerges at the sprout stage, and leaves begin at the seedling stage. Each natural leaf absorbs 1 sunlight per day. Stem measurements are visual units.</p>
         </section>
 
         <!-- Stage -->
         <p>
             Stage:
-            <span id="stageValue">seed</span> - <span id="levelValue">1</span>
+            <span id="stageValue">Seed</span> - <span id="levelValue">1</span>
         </p>
         <p>
             Growth Points:
@@ -241,7 +245,7 @@
                     <button class="upgrade-buy" data-upgrade="leaf" type="button">Buy <span data-upgrade-cost="leaf">1</span></button>
                 </div>
                 <div class="upgrade-card">
-                    <div><h3>Vitality <span class="upgrade-level">Lv. <span data-upgrade-level="vitality">0</span></span></h3><p>+1 healing, a sturdier stem and blooms</p></div>
+                    <div><h3>Vitality <span class="upgrade-level">Lv. <span data-upgrade-level="vitality">0</span></span></h3><p>+1 healing and a sturdier stem</p></div>
                     <button class="upgrade-buy" data-upgrade="vitality" type="button">Buy <span data-upgrade-cost="vitality">1</span></button>
                 </div>
             </div>
@@ -265,7 +269,9 @@
                 <div class="skill-node skill-node-locked">?</div>
             </div>
             <h3>Your plant's path</h3>
-            <p>New abilities will unlock here in a future update.</p>
+            <p>Skill points are earned every three plant stage changes. Points stay available until skill-tree abilities can be unlocked.</p>
+            <p class="skill-point-balance">Available skill points: <strong id="skillPointsValue">0</strong></p>
+            <p class="skill-point-progress"><span id="remainingStageChangesValue">3</span> stage changes until the next point.</p>
         </div>
     </aside>
     </body>

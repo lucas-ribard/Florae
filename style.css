@@ -193,6 +193,23 @@
             color: #719074;
         }
 
+        .skill-point-balance {
+            margin-top: 24px;
+            padding: 14px;
+            background: #142a1b;
+            border: 1px solid #477b50;
+            border-radius: 10px;
+        }
+
+        .skill-point-balance strong {
+            color: #8ee695;
+            font-size: 20px;
+        }
+
+        .skill-point-progress {
+            font-size: 13px;
+        }
+
         .skill-line {
             flex: 1;
             height: 2px;

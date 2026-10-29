@@ -3,6 +3,7 @@
 import { plant, weather, bugs, game, waterPlant, giveSunlight, giveNutriments, resetGameState, getUpgradeCost, purchaseUpgrade, adjustDebugValue, advanceGameDay } from "./gameData.js";
 import { startGameClock } from "./gameClock.js";
 import { createPlantSvg, getPlantVisualStats } from "./plantSvg.js";
+import { getPlantGrowthStage } from "./plant.js";
 
 
 const plantVisual = document.getElementById("plant");
@@ -27,6 +28,8 @@ const plantStatsToggle = document.getElementById("plantStatsToggle");
 const plantStatsPanel = document.getElementById("plantStatsPanel");
 
 const growthPointsValue = document.getElementById("growthPoints");
+const skillPointsValue = document.getElementById("skillPointsValue");
+const remainingStageChangesValue = document.getElementById("remainingStageChangesValue");
 
 const waterValue = document.getElementById("waterValue");
 const sunValue = document.getElementById("sunValue");
@@ -167,6 +170,7 @@ export function updateUI() {
     const visualStats = getPlantVisualStats(plant, game.upgrades);
 
     document.getElementById("plantStatsLevel").textContent = plant.level;
+    document.getElementById("plantStatsGrowthStage").textContent = getPlantGrowthStage(plant.level).name;
     document.getElementById("plantStatsLeafUpgrade").textContent = game.upgrades.leaf;
     document.getElementById("plantStatsSunlightYield").textContent = `+${20 + game.upgrades.leaf} per action`;
     document.getElementById("plantStatsLeafAbsorption").textContent = `+${visualStats.naturalLeafCount} per day`;
@@ -176,6 +180,9 @@ export function updateUI() {
     document.getElementById("plantStatsVitalityUpgrade").textContent = game.upgrades.vitality;
     document.getElementById("plantStatsHealingBonus").textContent = `+${game.upgrades.vitality} per day`;
     document.getElementById("plantStatsNaturalLeaves").textContent = visualStats.naturalLeafCount;
+    document.getElementById("plantStatsNaturalRoots").textContent = visualStats.naturalRootCount;
+    document.getElementById("plantStatsStemHeight").textContent = `${visualStats.stemHeight} units`;
+    document.getElementById("plantStatsStemWidth").textContent = visualStats.stemWidth ? `${visualStats.stemWidth.toFixed(1)} units` : "Not yet grown";
     document.getElementById("plantStatsLeaves").textContent = visualStats.leafCount;
     document.getElementById("plantStatsRoots").textContent = visualStats.rootCount;
 
@@ -186,8 +193,10 @@ export function updateUI() {
 
     // growth and health values
     growthValue.textContent = plant.growth;
-    stageValue.textContent = plant.stage;
+    stageValue.textContent = getPlantGrowthStage(plant.level).name;
     levelValue.textContent = plant.level;
+    skillPointsValue.textContent = game.skillPoints;
+    remainingStageChangesValue.textContent = 3 - game.stageChangeRemainder;
     healthValue.textContent = plant.health;
     healthFactorValue.textContent = plant.healthFactor;
     growthPointsValue.textContent = plant.growthPoints;

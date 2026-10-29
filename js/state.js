@@ -25,6 +25,8 @@ export const bugs = {
 export const game = {
     day: 1,
     season: "Spring",
+    skillPoints: 0,
+    stageChangeRemainder: 0,
     upgrades: {
         roots: 0,
         leaf: 0,

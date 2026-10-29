@@ -1,7 +1,7 @@
 // gameData.js
 
 import { plant, weather, bugs, game } from "./state.js";
-import { addResource, updatePlant as updatePlantState } from "./plant.js";
+import { addResource, countPlantStageChanges, updatePlant as updatePlantState } from "./plant.js";
 import { rollBugs as rollBugsState } from "./bugs.js";
 import { rollWeather as rollWeatherState, updateSeason } from "./weather.js";
 import { loadGameState, resetGameState as resetSavedGame, saveGameState as saveState } from "./persistence.js";
@@ -16,6 +16,19 @@ game.upgrades = {
     leaf: game.upgrades?.leaf ?? 0,
     vitality: game.upgrades?.vitality ?? 0
 };
+game.skillPoints = Number.isSafeInteger(game.skillPoints) ? Math.max(0, game.skillPoints) : 0;
+game.stageChangeRemainder = Number.isSafeInteger(game.stageChangeRemainder)
+    ? Math.max(0, game.stageChangeRemainder) % 3
+    : 0;
+
+function awardStageChangePoints(previousLevel, currentLevel) {
+    game.stageChangeRemainder += countPlantStageChanges(previousLevel, currentLevel);
+
+    while (game.stageChangeRemainder >= 3) {
+        game.skillPoints += 1;
+        game.stageChangeRemainder -= 3;
+    }
+}
 
 export function saveGameState() {
     saveState(state);
@@ -44,7 +57,9 @@ export function advanceGameDay() {
 
     weather.daysRemaining -= 1;
     rollBugs();
+    const previousLevel = plant.level;
     updatePlantState(plant, weather, game.upgrades);
+    awardStageChangePoints(previousLevel, plant.level);
     saveGameState();
 }
 
@@ -76,7 +91,8 @@ export function adjustDebugValue(stat, amount) {
         case "growthPoints":
             plant.growthPoints = Math.max(0, plant.growthPoints + amount);
             break;
-        case "growth":
+        case "growth": {
+            const previousLevel = plant.level;
             plant.growth += amount;
             while (plant.growth >= 100) {
                 plant.growth -= 100;
@@ -84,7 +100,9 @@ export function adjustDebugValue(stat, amount) {
                 plant.growthPoints += 1;
             }
             plant.growth = Math.max(0, plant.growth);
+            awardStageChangePoints(previousLevel, plant.level);
             break;
+        }
         case "health":
         case "water":
         case "sunlight":

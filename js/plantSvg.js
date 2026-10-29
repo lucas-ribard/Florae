@@ -1,4 +1,4 @@
-import { getNaturalLeafCount } from "./plant.js";
+import { getNaturalGrowthStats } from "./plant.js";
 
 function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, value));
@@ -25,41 +25,52 @@ export function getPlantVisualStats(plant, upgrades) {
     const rootLevel = getLevel(upgrades.roots);
     const leafLevel = getLevel(upgrades.leaf);
     const vitalityLevel = getLevel(upgrades.vitality);
+    const naturalGrowth = getNaturalGrowthStats(level);
+    const rootUpgradeBonus = level >= 2 ? Math.min(rootLevel, 7) * 2 : 0;
+    const stemWidth = naturalGrowth.stemHeight > 0
+        ? clamp(5 + vitalityLevel * 0.8 + Math.max(0, level - 1) * 0.25, 5, 13)
+        : 0;
 
     return {
         level,
         rootLevel,
         leafLevel,
         vitalityLevel,
-        rootCount: 3 + Math.min(rootLevel, 7) * 2,
-        naturalLeafCount: getNaturalLeafCount(level),
-        leafCount: getNaturalLeafCount(level) + Math.min(leafLevel, 6)
+        ...naturalGrowth,
+        stemWidth,
+        rootCount: naturalGrowth.naturalRootCount + rootUpgradeBonus,
+        leafCount: naturalGrowth.naturalLeafCount + (naturalGrowth.naturalLeafCount > 0 ? Math.min(leafLevel, 6) : 0)
     };
 }
 
 export function createPlantSvg(plant, upgrades) {
     const random = createRandom(plant.visualSeed);
-    const { level, rootLevel, leafLevel, vitalityLevel, rootCount, leafCount } = getPlantVisualStats(plant, upgrades);
-    const top = clamp(112 - Math.max(0, level - 1) * 7, 48, 112);
-    const stemWidth = clamp(5 + vitalityLevel * 0.8 + Math.max(0, level - 1) * 0.25, 5, 13);
+    const { level, rootLevel, leafLevel, vitalityLevel, stemHeight, stemWidth, rootCount, leafCount } = getPlantVisualStats(plant, upgrades);
+    const top = 211 - stemHeight;
     const hue = Math.round(112 + random() * 34);
     const leafColor = `hsl(${hue} 48% 43%)`;
     const leafHighlight = `hsl(${hue} 54% 58%)`;
     const stemColor = `hsl(${Math.max(85, hue - 20)} 42% 34%)`;
     const stemBend = Math.round((random() - 0.5) * 28);
-    const stem = `M 180 211 C ${174 + stemBend} 174, ${188 - stemBend} 137, ${180 + stemBend} ${top}`;
+    const stem = stemHeight > 0
+        ? `<path d="M 180 211 C ${174 + stemBend} ${211 - stemHeight * 0.4}, ${188 - stemBend} ${211 - stemHeight * 0.75}, ${180 + stemBend} ${top}" fill="none" stroke="${stemColor}" stroke-width="${stemWidth}" stroke-linecap="round" />`
+        : "";
     const roots = Array.from({ length: rootCount }, (_, index) => {
+        if (index === 0) {
+            return `<path d="M 180 211 C 178 220, 182 228, 180 238" />`;
+        }
+
         const side = index % 2 === 0 ? -1 : 1;
-        const rank = Math.floor(index / 2) + 1;
-        const endX = 180 + side * (13 + rank * 12 + random() * 8);
+        const rank = Math.ceil(index / 2);
+        const endX = 180 + side * (12 + rank * 13 + random() * 8);
         const endY = 218 + rank * 5 + random() * 9;
         const controlX = 180 + side * (rank * 5 + random() * 10);
-        return `<path d="M 180 207 C ${controlX} 222, ${endX - side * 4} ${endY - 5}, ${endX} ${endY}" />`;
+        return `<path d="M 180 214 C ${controlX} 222, ${endX - side * 4} ${endY - 5}, ${endX} ${endY}" />`;
     }).join("");
     const leaves = Array.from({ length: leafCount }, (_, index) => {
-        const progress = (index + 0.8) / (leafCount + 0.3);
-        const y = Math.round(196 - progress * (196 - top));
-        const stemX = Math.round(180 + stemBend * (1 - (y - top) / (211 - top)));
+        const progress = (index + 1) / (leafCount + 1);
+        const y = Math.round(top + stemHeight * 0.72 * (1 - progress));
+        const stemX = Math.round(180 + stemBend * (1 - (y - top) / stemHeight));
         const side = index % 2 === 0 ? -1 : 1;
         const size = Math.round(24 + random() * 10 + Math.min(leafLevel, 5));
         const rise = 12 + random() * 10;
@@ -70,21 +81,15 @@ export function createPlantSvg(plant, upgrades) {
 
         return `<g><path d="M ${stemX} ${y} C ${controlX} ${controlY - 11}, ${tipX + side * 5} ${tipY - 7}, ${tipX} ${tipY} C ${tipX - side * 4} ${tipY + 10}, ${stemX + side * 5} ${y + 5}, ${stemX} ${y} Z" /><path class="vein" d="M ${stemX} ${y} Q ${stemX + side * size * 0.45} ${y - rise * 0.35}, ${tipX} ${tipY}" /></g>`;
     }).join("");
-    const flowerPetalCount = 4 + Math.min(vitalityLevel, 4) * 2;
-    const flower = vitalityLevel > 0
-        ? Array.from({ length: flowerPetalCount }, (_, index) => {
-            const angle = (index / flowerPetalCount) * Math.PI * 2;
-            const x = Math.round(180 + stemBend + Math.cos(angle) * 9);
-            const y = Math.round(top - 3 + Math.sin(angle) * 9);
-            return `<ellipse cx="${x}" cy="${y}" rx="5" ry="9" fill="hsl(${Math.round(20 + random() * 35)} 82% 68%)" transform="rotate(${Math.round(angle * 180 / Math.PI)} ${x} ${y})" />`;
-        }).join("") + `<circle cx="${180 + stemBend}" cy="${top - 3}" r="5" fill="#f3c969" />`
+    const seed = level <= 4
+        ? `<ellipse cx="180" cy="205" rx="13" ry="8" fill="#9a7045" /><path d="M 176 203 Q 180 201 184 203" fill="none" stroke="#c49a62" stroke-width="2" stroke-linecap="round" />`
         : "";
 
-    return `<svg class="plant-svg" viewBox="0 0 360 280" role="img" aria-label="Your growing plant">
+    return `<svg class="plant-svg" viewBox="0 0 360 280" role="img" aria-label="${getPlantVisualStats(plant, upgrades).stage} plant">
         <ellipse cx="180" cy="216" rx="98" ry="7" fill="#365b3c" opacity=".65" />
+        ${seed}
         <g class="roots" fill="none" stroke="#a8754d" stroke-width="${2 + Math.min(rootLevel * 0.25, 2)}" stroke-linecap="round">${roots}</g>
-        <path d="${stem}" fill="none" stroke="${stemColor}" stroke-width="${stemWidth}" stroke-linecap="round" />
+        ${stem}
         <g fill="${leafColor}" stroke="${leafHighlight}" stroke-width="1.5" stroke-linejoin="round">${leaves}</g>
-        <g>${flower}</g>
     </svg>`;
 }

@@ -29,6 +29,12 @@ export function loadGameState(state) {
             Object.assign(state.weather, parsedState.weather);
             Object.assign(state.bugs, parsedState.bugs);
             Object.assign(state.game, parsedState.game);
+            state.game.skillPoints = Number.isSafeInteger(state.game.skillPoints)
+                ? Math.max(0, state.game.skillPoints)
+                : 0;
+            state.game.stageChangeRemainder = Number.isSafeInteger(state.game.stageChangeRemainder)
+                ? Math.max(0, state.game.stageChangeRemainder) % 3
+                : 0;
         }
     } catch {
         localStorage.removeItem(saveKey);
@@ -60,6 +66,8 @@ export function resetGameState(state) {
     Object.assign(state.game, {
         day: 1,
         season: "Spring",
+        skillPoints: 0,
+        stageChangeRemainder: 0,
         upgrades: { roots: 0, leaf: 0, vitality: 0 }
     });
 }
