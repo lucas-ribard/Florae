@@ -170,47 +170,63 @@
 
         </div>
         
-        <section class="debug-section" aria-labelledby="debugHeading">
-            <div class="debug-header">
-                <h3 id="debugHeading">Debug tools</h3>
-                <span>Health factor: <strong id="HealthFactorValue">0</strong></span>
-            </div>
-
-            <div class="debug-group">
-                <h4>Growth points</h4>
-                <div class="debug-actions">
-                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="10">+10 points</button>
-                    <button type="button" data-debug-stat="growthPoints" data-debug-amount="-10">-10 points</button>
+        <div class="debug-tools">
+            <button id="debugToggle" class="debug-toggle" type="button" aria-controls="debugPanel" aria-expanded="false">
+                <span>Debug tools</span>
+                <span id="debugToggleLabel">Show</span>
+            </button>
+            <section id="debugPanel" class="debug-section" aria-labelledby="debugHeading" hidden>
+                <div class="debug-header">
+                    <h3 id="debugHeading">Debug controls</h3>
+                    <span>Health factor: <strong id="HealthFactorValue">0</strong></span>
                 </div>
-            </div>
 
-            <div class="debug-group">
-                <h4>Plant growth</h4>
-                <div class="debug-actions">
-                    <button type="button" data-debug-stat="growth" data-debug-amount="25">+25 growth</button>
-                    <button type="button" data-debug-stat="growth" data-debug-amount="-25">-25 growth</button>
-                    <button type="button" data-debug-stat="health" data-debug-amount="25">+25 health</button>
-                    <button type="button" data-debug-stat="health" data-debug-amount="-25">-25 health</button>
+                <div class="debug-group">
+                    <h4>Growth points</h4>
+                    <div class="debug-actions">
+                        <button type="button" data-debug-stat="growthPoints" data-debug-amount="10">+10 points</button>
+                        <button type="button" data-debug-stat="growthPoints" data-debug-amount="-10">-10 points</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="debug-group">
-                <h4>Resources</h4>
-                <div class="debug-actions">
-                    <button id="waterButton" type="button">+ Water</button>
-                    <button id="waterButtonNegative" type="button">- Water</button>
-                    <button id="sunButton" type="button">+ Sunlight</button>
-                    <button id="sunButtonNegative" type="button">- Sunlight</button>
-                    <button id="nutrimentsButton" type="button">+ Nutriments</button>
-                    <button id="nutrimentsButtonNegative" type="button">- Nutriments</button>
+                <div class="debug-group">
+                    <h4>Skill points</h4>
+                    <div class="debug-actions">
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="1">+1 point</button>
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="5">+5 points</button>
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="-1">-1 point</button>
+                        <button type="button" data-debug-stat="skillPoints" data-debug-amount="-5">-5 points</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="debug-actions debug-footer">
-                <button id="debugAdvanceDay" type="button">Advance one day</button>
-                <button id="resetButton" class="debug-reset" type="button">Reset game</button>
-        </section>
+                <div class="debug-group">
+                    <h4>Plant growth</h4>
+                    <div class="debug-actions">
+                        <button type="button" data-debug-stat="growth" data-debug-amount="25">+25 growth</button>
+                        <button type="button" data-debug-stat="growth" data-debug-amount="-25">-25 growth</button>
+                        <button type="button" data-debug-stat="health" data-debug-amount="25">+25 health</button>
+                        <button type="button" data-debug-stat="health" data-debug-amount="-25">-25 health</button>
+                    </div>
+                </div>
 
+                <div class="debug-group">
+                    <h4>Resources</h4>
+                    <div class="debug-actions">
+                        <button id="waterButton" type="button">+ Water</button>
+                        <button id="waterButtonNegative" type="button">- Water</button>
+                        <button id="sunButton" type="button">+ Sunlight</button>
+                        <button id="sunButtonNegative" type="button">- Sunlight</button>
+                        <button id="nutrimentsButton" type="button">+ Nutriments</button>
+                        <button id="nutrimentsButtonNegative" type="button">- Nutriments</button>
+                    </div>
+                </div>
+
+                <div class="debug-actions debug-footer">
+                    <button id="debugAdvanceDay" type="button">Advance one day</button>
+                    <button id="resetButton" class="debug-reset" type="button">Reset game</button>
+                </div>
+            </section>
+        </div>
 
         <div id="message">
             Take care of your plant!
@@ -272,7 +288,7 @@
 
             <section class="skill-speciality" aria-labelledby="branchSpecialityHeading">
                 <h3 id="branchSpecialityHeading">Branch</h3>
-                <p>Each node adds a side branch. Leaf upgrades bought after that node add twice as many leaves; earlier upgrades are unchanged.</p>
+                <p>Each node adds a side branch. Every Leaf upgrade bought after a Branch node adds one extra leaf per Branch node; existing upgrades are unchanged.</p>
                 <div class="skill-node-row" aria-label="Branch speciality ranks">
                     <button class="skill-node" type="button" data-skill="branch" data-skill-rank="1" data-skill-label="Branch I">1</button>
                     <button class="skill-node" type="button" data-skill="branch" data-skill-rank="2" data-skill-label="Branch II">2</button>
@@ -280,7 +296,7 @@
                     <button class="skill-node" type="button" data-skill="branch" data-skill-rank="4" data-skill-label="Branch IV">4</button>
                     <button class="skill-node" type="button" data-skill="branch" data-skill-rank="5" data-skill-label="Branch V">5</button>
                 </div>
-                <p class="skill-branch-effect">Next Leaf upgrade: <span id="branchLeafMultiplier">×1</span> leaves</p>
+                <p class="skill-branch-effect">Leaves from next Leaf upgrade: <span id="branchLeafMultiplier">1 leaf</span></p>
             </section>
 
             <section class="skill-speciality" aria-labelledby="flowerSpecialityHeading">

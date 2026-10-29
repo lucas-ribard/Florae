@@ -25,6 +25,9 @@ const upgradeBuyButtons = document.querySelectorAll("[data-upgrade]");
 const skillBuyButtons = document.querySelectorAll("[data-skill]");
 const debugValueButtons = document.querySelectorAll("[data-debug-stat]");
 const advanceDayButton = document.getElementById("debugAdvanceDay");
+const debugToggle = document.getElementById("debugToggle");
+const debugPanel = document.getElementById("debugPanel");
+const debugToggleLabel = document.getElementById("debugToggleLabel");
 const plantStatsToggle = document.getElementById("plantStatsToggle");
 const plantStatsPanel = document.getElementById("plantStatsPanel");
 
@@ -53,6 +56,13 @@ plantStatsToggle.addEventListener("click", () => {
     const isExpanded = plantStatsToggle.getAttribute("aria-expanded") === "true";
     plantStatsToggle.setAttribute("aria-expanded", String(!isExpanded));
     plantStatsPanel.hidden = isExpanded;
+});
+
+debugToggle.addEventListener("click", () => {
+    const isExpanded = debugToggle.getAttribute("aria-expanded") === "true";
+    debugToggle.setAttribute("aria-expanded", String(!isExpanded));
+    debugPanel.hidden = isExpanded;
+    debugToggleLabel.textContent = isExpanded ? "Show" : "Hide";
 });
 
 waterButton.addEventListener("click", () => {
@@ -202,7 +212,7 @@ export function updateUI() {
     document.getElementById("plantStatsFlowers").textContent = visualStats.flowerUnlocked && visualStats.stemHeight > 0
         ? 1 + (visualStats.branchFlowerUnlocked ? visualStats.branchLevel : 0)
         : 0;
-    document.getElementById("branchLeafMultiplier").textContent = `×${visualStats.nextLeafUpgradeMultiplier}`;
+    document.getElementById("branchLeafMultiplier").textContent = `${visualStats.nextLeafUpgradeLeaves} ${visualStats.nextLeafUpgradeLeaves === 1 ? "leaf" : "leaves"}`;
 
     // states values
     waterValue.textContent = plant.water;

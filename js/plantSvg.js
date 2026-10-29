@@ -34,7 +34,7 @@ export function getPlantVisualStats(plant, upgrades) {
     const branchMilestones = Array.isArray(skillTree.branchLeafMilestones)
         ? skillTree.branchLeafMilestones
         : [];
-    const leafMultiplierForRank = upgradeRank => 2 ** Array.from({ length: branchLevel }, (_, index) => {
+    const leafLeavesForRank = upgradeRank => 1 + Array.from({ length: branchLevel }, (_, index) => {
         const milestone = Number.isSafeInteger(branchMilestones[index]) ? branchMilestones[index] : leafLevel;
         return milestone < upgradeRank;
     }).filter(Boolean).length;
@@ -42,7 +42,7 @@ export function getPlantVisualStats(plant, upgrades) {
 
     if (naturalGrowth.naturalLeafCount > 0) {
         for (let upgradeRank = 1; upgradeRank <= leafLevel; upgradeRank += 1) {
-            leafUpgradeLeaves += leafMultiplierForRank(upgradeRank);
+            leafUpgradeLeaves += leafLeavesForRank(upgradeRank);
         }
     }
     const rootUpgradeBonus = level >= 2 ? Math.min(rootLevel, 7) * 2 : 0;
@@ -63,7 +63,7 @@ export function getPlantVisualStats(plant, upgrades) {
         barkHeavyRainReduction: barkLevel,
         strongRootYieldBonus: strongRootLevel * 2,
         heartwoodGrowthBonus: heartwoodLevel,
-        nextLeafUpgradeMultiplier: leafMultiplierForRank(leafLevel + 1),
+        nextLeafUpgradeLeaves: leafLeavesForRank(leafLevel + 1),
         branchCount: naturalGrowth.stemHeight > 0 ? branchLevel : 0,
         flowerUnlocked: Boolean(skillTree.flower),
         branchFlowerUnlocked: Boolean(skillTree.branchFlower && skillTree.flower && branchLevel > 0),
@@ -179,7 +179,7 @@ export function createPlantSvg(plant, upgrades) {
         ? createFlower(180 + stemBend, top - 4)
             + (branchFlowerUnlocked ? branchPositions.map(({ x, y }, index) => createFlower(x, y - 2, index + 1)).join("") : "")
         : "";
-    const seed = level <= 2
+    const seed = level <= 4
         ? `<ellipse cx="180" cy="205" rx="13" ry="8" fill="#9a7045" /><path d="M 176 203 Q 180 201 184 203" fill="none" stroke="#c49a62" stroke-width="2" stroke-linecap="round" />`
         : "";
 

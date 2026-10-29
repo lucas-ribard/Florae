@@ -117,6 +117,9 @@ export function adjustDebugValue(stat, amount) {
         case "growthPoints":
             plant.growthPoints = Math.max(0, plant.growthPoints + amount);
             break;
+        case "skillPoints":
+            game.skillPoints = Math.max(0, game.skillPoints + amount);
+            break;
         case "growth": {
             const previousLevel = plant.level;
             plant.growth += amount;
